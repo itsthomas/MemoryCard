@@ -312,11 +312,6 @@ section h2 {
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-.card-item:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--box-shadow-medium);
-}
-
 .card-info {
   display: flex;
   align-items: center;
