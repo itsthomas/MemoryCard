@@ -1,8 +1,8 @@
-#Why I'm using `IndexedDB` (with Dexie.js) instead of just `localStorage` 
+# Why I'm using `IndexedDB` (with Dexie.js) instead of just `localStorage` 
 
 There are several compelling reasons to use Dexie.js (and by extension, IndexedDB) over `localStorage` for an application like this Memory Card Game:
 
-##Why Dexie.js (IndexedDB) is Preferred over `localStorage`
+## Why Dexie.js (IndexedDB) is Preferred over `localStorage`
 
 1.  **Storage Capacity:**
     * **`localStorage`:** Is limited to a small amount of data, typically **5-10 MB** per origin (website). While fine for very small settings or preferences, it would quickly become a bottleneck for storing many memory cards, especially if they include larger text descriptions or if you plan to store other data in the future.
