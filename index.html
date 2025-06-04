@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Memory Card Game</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header class="main-header">
+      <h1>Memory Card App</h1>
+      <nav>
+        <button id="adminBtn">Admin</button>
+        <button id="playBtn">Play</button>
+      </nav>
+    </header>
+
+    <main>
+      <section id="adminSection" class="hidden">
+        <h2>Admin Section</h2>
+        <div class="card-form-container">
+          <h3>Create/Edit Memory Card</h3>
+          <form id="cardForm">
+            <input type="hidden" id="cardId" />
+            <div class="form-group">
+              <label for="imageURL">Image URL:</label>
+              <input
+                type="url"
+                id="imageURL"
+                placeholder="e.g., https://example.com/image.jpg"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="nameOfPainting">Name of painting:</label>
+              <input type="text" id="nameOfPainting" required />
+            </div>
+            <div class="form-group">
+              <label for="painter">Painter:</label>
+              <input type="text" id="painter" required />
+            </div>
+            <div class="form-group">
+              <label for="location">Location:</label>
+              <input type="text" id="location" required />
+            </div>
+            <button type="submit" id="saveCardBtn">Add Card</button>
+            <button type="button" id="cancelEditBtn" class="hidden">
+              Cancel Edit
+            </button>
+          </form>
+        </div>
+
+        <div class="card-list-header">
+          <h3>All Memory Cards</h3>
+          <span id="totalCardsCount">Total cards: 0</span>
+        </div>
+
+        <div class="search-container">
+          <input
+            type="text"
+            id="cardSearchInput"
+            placeholder="Search by painting name, painter or location..."
+          />
+          <i class="fas fa-search search-icon"></i>
+        </div>
+        <div id="cardList" class="card-list">
+          <p id="noCardsMessage" class="hidden">
+            No cards added yet. Start by creating some!
+          </p>
+        </div>
+        <div id="paginationControls" class="pagination-controls hidden"></div>
+      </section>
+
+      <section id="playSection" class="hidden">
+        <h2>Play Game</h2>
+        <div id="memoryCardsGrid" class="memory-cards-grid"></div>
+        <p id="playErrorMessage" class="hidden message-prompt">
+          Please add some memory cards in the Admin section first!
+        </p>
+      </section>
+    </main>
+
+    <script src="https://unpkg.com/dexie@3.2.0/dist/dexie.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

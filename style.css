@@ -1,0 +1,477 @@
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+.main-header {
+  background-color: #4caf50;
+  color: white;
+  padding: 15px 20px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.main-header h1 {
+  margin: 0;
+  font-size: 2em;
+}
+
+nav {
+  margin-top: 10px;
+}
+
+nav button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 0 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+}
+
+nav button:hover {
+  background-color: #0056b3;
+}
+
+main {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 20px auto;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+section {
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+section h2,
+section h3 {
+  color: #4caf50;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+  /* margin-bottom: 20px; This will be handled by .card-list-header's margin for h3 in that specific context */
+}
+
+/* Admin Section Styling */
+.card-form-container {
+  background-color: #e9ffe9;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  border: 1px dashed #aaffaa;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input[type='text'],
+.form-group input[type='url'] {
+  width: calc(100% - 22px); /* Account for padding and border */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1em;
+}
+
+::placeholder {
+  color: rgb(194, 192, 192);
+  opacity: 1; /* Firefox */
+}
+
+#cardForm button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+  margin-right: 10px;
+}
+
+#cardForm button:hover {
+  background-color: #218838;
+}
+
+#cancelEditBtn {
+  background-color: #6c757d;
+}
+
+#cancelEditBtn:hover {
+  background-color: #5a6268;
+}
+
+.card-list-header {
+  display: flex;
+  justify-content: space-between; /* Pushes content to opposite ends */
+  align-items: baseline; /* Aligns items based on their text baseline */
+  margin-bottom: 15px; /* Add some space below the header and the list */
+  padding-bottom: 10px; /* Aligns with original section h3 padding */
+  border-bottom: 2px solid #eee; /* Aligns with original section h3 border */
+}
+
+.card-list-header h3 {
+  margin: 0; /* Remove default margin from h3 for better alignment within flex */
+  color: #4caf50; /* Keep the green color */
+  padding-bottom: 0; /* No extra padding here as it's on the container */
+  border-bottom: none; /* No border here as it's on the container */
+}
+
+#totalCardsCount {
+  /* Styling for the total cards count */
+  font-weight: bold;
+  color: #007bff; /* A prominent color for the count */
+  font-size: 1.1em;
+}
+
+/* Search Box Styling */
+.search-container {
+  position: relative; /* Allows positioning of the icon */
+  margin-bottom: 20px; /* Space below the search box */
+}
+
+#cardSearchInput {
+  width: calc(100% - 55px); /* Adjust width to make space for the icon */
+  padding: 10px 15px 10px 40px; /* Left padding for icon */
+  border: 1px solid #ccc;
+  border-radius: 25px; /* Rounded corners for a modern look */
+  font-size: 1em;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08); /* Subtle inner shadow */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#cardSearchInput:focus {
+  border-color: #007bff;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08),
+    0 0 5px rgba(0, 123, 255, 0.2);
+  outline: none; /* Remove default focus outline */
+}
+
+.search-icon {
+  position: absolute;
+  left: 15px; /* Position the icon inside the input field */
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  font-size: 1.1em;
+}
+
+.card-list {
+  margin-top: 0; /* Adjusted since .card-list-header now handles top spacing */
+}
+
+.card-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.card-info {
+  flex-grow: 1;
+  display: flex; /* Use flex to align image and text */
+  align-items: center;
+}
+
+.card-info img {
+  max-width: 80px;
+  max-height: 80px;
+  object-fit: contain;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 15px;
+  flex-shrink: 0; /* Prevent image from shrinking */
+}
+
+.card-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.card-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2em;
+  padding: 5px;
+  color: #007bff;
+  transition: color 0.2s ease;
+}
+
+.card-actions button.delete-btn {
+  color: #dc3545;
+}
+
+.card-actions button:hover {
+  color: #0056b3;
+}
+.card-actions button.delete-btn:hover {
+  color: #c82333;
+}
+
+/* Pagination Controls */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 5px; /* Space between buttons */
+}
+
+.pagination-controls button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  min-width: 35px; /* Ensure consistent width for page numbers */
+}
+
+.pagination-controls button:hover:not(.active) {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.pagination-controls button.active {
+  background-color: #4caf50; /* Highlight active page */
+  font-weight: bold;
+  cursor: default; /* No hover effect on active button */
+}
+
+.pagination-controls button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Play Section Styling - Masonry-like Grid */
+.memory-cards-grid {
+  display: grid;
+  /* This creates a fluid grid that will have as many columns as can fit,
+     each column being at least 200px wide. */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  padding: 10px;
+  /* Add this for potential masonry layout improvements if items vary wildly in height */
+  grid-auto-rows: minmax(
+    100px,
+    auto
+  ); /* Allows rows to auto-adjust but ensures minimum height */
+}
+
+.memory-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  perspective: 1000px; /* For 3D flip effect */
+  cursor: pointer;
+  height: auto; /* Allow height to adjust based on content */
+  overflow: hidden; /* Hide overflow from image */
+  display: flex; /* Helps ensure inner content fills card */
+  flex-direction: column; /* For proper internal layout */
+}
+
+.memory-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d; /* Keep 3D transform */
+}
+
+.memory-card.flipped .memory-card-inner {
+  transform: rotateY(180deg);
+}
+
+.memory-card-front,
+.memory-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden; /* Hide back of element when facing away */
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  overflow: hidden; /* Ensure content stays within bounds */
+  box-sizing: border-box; /* Include padding in element's total width and height */
+}
+
+.memory-card-front {
+  background-color: #f0f0f0;
+  color: black;
+  padding: 5px; /* Small padding so image doesn't touch edges */
+}
+
+.memory-card-front img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* Ensures the whole image is visible */
+  display: block; /* Remove extra space below image */
+}
+
+.memory-card-back {
+  background-color: #e0f7fa; /* Light blue for text side */
+  color: #333;
+  transform: rotateY(180deg);
+  padding: 15px;
+  text-align: center; /* Center align text */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* Center items horizontally */
+}
+
+.memory-card-back p {
+  margin: 5px 0;
+  font-size: 0.9em;
+  word-break: break-word; /* Prevent long words from overflowing */
+  text-wrap: balance; /* Modern property for better text wrapping */
+}
+
+.memory-card-back p.painting-name {
+  font-size: 1.1em; /* Slightly larger for emphasis */
+  font-weight: bold;
+  color: #0056b3; /* A slightly darker blue for the name */
+  margin-bottom: 8px; /* More space below the name */
+}
+
+.memory-card-back p.painter-name {
+  margin-top: 8px; /* More space above painter */
+  margin-bottom: 5px;
+}
+
+.memory-card-back p.location-name {
+  font-style: italic;
+  color: #555;
+  margin-top: 5px;
+}
+
+.memory-card-back hr {
+  width: 60%; /* Adjust width of the horizontal line */
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.25),
+    rgba(0, 0, 0, 0)
+  );
+  margin: 10px 0; /* Space around the line */
+}
+
+/* Orientation specific styles for Play section */
+/* These aspect ratios help in creating a consistent grid appearance for different image orientations */
+.memory-card.portrait {
+  aspect-ratio: 3 / 4; /* Typical portrait aspect ratio */
+}
+
+.memory-card.landscape {
+  aspect-ratio: 4 / 3; /* Typical landscape aspect ratio */
+}
+
+.memory-card.square {
+  aspect-ratio: 1 / 1;
+}
+
+/* Utility Classes */
+.hidden {
+  display: none !important;
+}
+
+.message-prompt {
+  background-color: #ffc107;
+  color: #333;
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Responsive adjustments for the grid */
+@media (max-width: 768px) {
+  .memory-cards-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+  }
+  nav button {
+    padding: 8px 15px;
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 480px) {
+  nav button {
+    display: block;
+    width: calc(100% - 10px);
+    margin: 5px auto;
+  }
+  .memory-cards-grid {
+    grid-template-columns: 1fr; /* Single column on very small screens */
+  }
+  main {
+    padding: 10px;
+    margin: 10px auto;
+  }
+  section {
+    padding: 15px;
+  }
+}
+
+/* style.css for export and import buttons */
+.admin-utility-btn {
+  margin-left: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#exportDataBtn {
+  background-color: #17a2b8; /* Info blue */
+  color: white;
+}
+
+#exportDataBtn:hover {
+  background-color: #138496;
+}
+
+#importDataLabel {
+  background-color: #ffc107; /* Warning yellow */
+  color: #333;
+}
+
+#importDataLabel:hover {
+  background-color: #e0a800;
+}

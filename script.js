@@ -1,0 +1,600 @@
+document.addEventListener('DOMContentLoaded', async () => {
+  // --- DOM Element References ---
+  const adminBtn = document.getElementById('adminBtn');
+  const playBtn = document.getElementById('playBtn');
+
+  const adminSection = document.getElementById('adminSection');
+  const playSection = document.getElementById('playSection');
+
+  const cardForm = document.getElementById('cardForm');
+  const cardIdInput = document.getElementById('cardId'); // This will now hold the Dexie auto-incremented ID
+  const imageURLInput = document.getElementById('imageURL');
+  const nameOfPaintingInput = document.getElementById('nameOfPainting');
+  const painterInput = document.getElementById('painter');
+  const locationInput = document.getElementById('location');
+  const saveCardBtn = document.getElementById('saveCardBtn');
+  const cancelEditBtn = document.getElementById('cancelEditBtn');
+
+  const cardListDiv = document.getElementById('cardList');
+  const noCardsMessage = document.getElementById('noCardsMessage');
+  const totalCardsCountSpan = document.getElementById('totalCardsCount');
+
+  const memoryCardsGrid = document.getElementById('memoryCardsGrid');
+  const playErrorMessage = document.getElementById('playErrorMessage');
+
+  // Search Input Reference
+  const cardSearchInput = document.getElementById('cardSearchInput');
+
+  // Pagination Controls
+  const paginationControls = document.getElementById('paginationControls');
+
+  // --- NEW: Export/Import Controls (Dynamically added for cleaner HTML) ---
+  const exportDataBtn = document.createElement('button');
+  exportDataBtn.id = 'exportDataBtn';
+  exportDataBtn.textContent = 'Export Data';
+  exportDataBtn.style.cssText = 'background-color: #17a2b8; margin-left: 10px;'; // Add some basic styling
+  exportDataBtn.classList.add('admin-utility-btn'); // Add a class for potential styling
+  const importDataInput = document.createElement('input');
+  importDataInput.type = 'file';
+  importDataInput.id = 'importDataInput';
+  importDataInput.accept = '.json';
+  importDataInput.style.display = 'none'; // Hide the file input
+  const importDataLabel = document.createElement('label');
+  importDataLabel.htmlFor = 'importDataInput';
+  importDataLabel.textContent = 'Import Data';
+  importDataLabel.style.cssText = 'background-color: #ffc107; color: #333; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 1em; transition: background-color 0.3s ease; margin-left: 10px; display: inline-block;'; // Mimic button styling
+  importDataLabel.classList.add('admin-utility-btn'); // Add a class for potential styling
+
+  const adminSectionDiv = document.getElementById('adminSection');
+  if (adminSectionDiv) {
+    const utilityDiv = document.createElement('div');
+    utilityDiv.style.marginTop = '20px';
+    utilityDiv.style.display = 'flex';
+    utilityDiv.style.justifyContent = 'flex-end'; // Align to the right
+    utilityDiv.appendChild(exportDataBtn);
+    utilityDiv.appendChild(importDataInput); // The hidden input
+    utilityDiv.appendChild(importDataLabel); // The styled label acting as button
+    adminSectionDiv.appendChild(utilityDiv);
+  }
+
+
+  // --- Dexie.js Database Setup ---
+  const db = new Dexie('MemoryCardsDB');
+  db.version(1).stores({
+    cards: '++id, imageSide, textSide.name, textSide.painter, textSide.location',
+  });
+
+  // Open the database (this is asynchronous)
+  try {
+    await db.open();
+    console.log('Dexie database opened successfully.');
+  } catch (err) {
+    console.error('Failed to open Dexie database:', err.stack || err);
+    // Potentially show an error message to the user
+    // Consider disabling features if the database cannot be opened
+    alert('Error initializing the database. Your data might not be saved.');
+  }
+
+  // --- Data Storage and State ---
+  let currentEditCardId = null; // To keep track of the card being edited
+
+  // Pagination State
+  const cardsPerPage = 10;
+  let currentPage = 1;
+
+  // --- Utility Functions ---
+
+  /**
+   * Shows a specific section and hides others.
+   * @param {HTMLElement} sectionToShow - The section to display.
+   */
+  function showSection(sectionToShow) {
+    adminSection.classList.add('hidden');
+    playSection.classList.add('hidden');
+    sectionToShow.classList.remove('hidden');
+  }
+
+  /**
+   * Validates if a string is a well-formed URL.
+   * @param {string} string - The string to validate.
+   * @returns {boolean} - True if the string is a valid URL, false otherwise.
+   */
+  function isValidURL(string) {
+    try {
+      new URL(string);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /**
+   * Determines the orientation of an image (portrait, landscape, or square)
+   * by loading it temporarily.
+   * @param {string} imgUrl - The URL of the image.
+   * @param {function(string): void} callback - A callback function to receive the orientation class.
+   */
+  function getOrientationClass(imgUrl, callback) {
+    const img = new Image();
+    img.onload = () => {
+      if (img.naturalWidth > img.naturalHeight) {
+        callback('landscape');
+      } else if (img.naturalHeight > img.naturalWidth) {
+        callback('portrait');
+      } else {
+        callback('square');
+      }
+    };
+    img.onerror = () => {
+      console.error(
+        'Failed to load image for orientation check, defaulting to square:',
+        imgUrl
+      );
+      callback('square'); // Default to square if image fails to load
+    };
+    img.src = imgUrl;
+  }
+
+  // --- Admin Section Functions ---
+
+  /**
+   * Renders the list of all memory cards in the admin section,
+   * applying search filters and pagination.
+   */
+  async function renderCardList() {
+    // Clear existing list items
+    cardListDiv.innerHTML = '';
+
+    const searchQuery = cardSearchInput.value.toLowerCase().trim();
+    let allCards = await db.cards.toArray(); // Fetch all cards for filtering
+
+    const filteredCards = allCards.filter((card) => {
+      if (searchQuery === '') {
+        return true; // If search box is empty, show all cards
+      }
+      const paintingName = card.textSide.name.toLowerCase();
+      const painter = card.textSide.painter.toLowerCase();
+      const location = card.textSide.location.toLowerCase();
+      return (
+        paintingName.includes(searchQuery) ||
+        painter.includes(searchQuery) ||
+        location.includes(searchQuery)
+      );
+    });
+
+    // Update the total card count span based on filtered results
+    totalCardsCountSpan.textContent = `Total cards: ${filteredCards.length}`;
+
+    if (filteredCards.length === 0) {
+      noCardsMessage.textContent =
+        searchQuery === ''
+          ? 'No cards added yet. Start by creating some!'
+          : 'No matching cards found. Try a different search!';
+      noCardsMessage.classList.remove('hidden');
+      paginationControls.classList.add('hidden'); // Hide pagination if no cards
+      return;
+    }
+    noCardsMessage.classList.add('hidden'); // Hide "no cards" message
+
+    // Calculate pagination
+    const totalPages = Math.ceil(filteredCards.length / cardsPerPage);
+    currentPage = Math.min(currentPage, totalPages); // Ensure current page is valid
+
+    const startIndex = (currentPage - 1) * cardsPerPage;
+    const endIndex = startIndex + cardsPerPage;
+    const cardsToDisplay = filteredCards.slice(startIndex, endIndex);
+
+    cardsToDisplay.forEach((card) => {
+      const cardItem = document.createElement('div');
+      cardItem.classList.add('card-item');
+      cardItem.setAttribute('data-id', card.id); // 'id' will now be numerical
+
+      cardItem.innerHTML = `
+            <div class="card-info">
+                <img src="${card.imageSide}" alt="${card.textSide.name}">
+                <span>
+                    <strong>${card.textSide.name}</strong><br>
+                    by ${card.textSide.painter}<br>
+                    <i>${card.textSide.location}</i>
+                </span>
+            </div>
+            <div class="card-actions">
+                <button class="edit-btn" title="Edit Card"><i class="fas fa-edit"></i></button>
+                <button class="delete-btn" title="Delete Card"><i class="fas fa-trash-alt"></i></button>
+            </div>
+        `;
+      cardListDiv.appendChild(cardItem);
+    });
+
+    renderPaginationControls(totalPages);
+  }
+
+  /**
+   * Renders the pagination buttons.
+   * @param {number} totalPages - The total number of pages.
+   */
+  function renderPaginationControls(totalPages) {
+    paginationControls.innerHTML = ''; // Clear existing buttons
+
+    if (totalPages <= 1) {
+      paginationControls.classList.add('hidden');
+      return;
+    }
+
+    paginationControls.classList.remove('hidden');
+
+    // Previous button
+    const prevBtn = document.createElement('button');
+    prevBtn.textContent = 'Prev';
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderCardList();
+      }
+    });
+    paginationControls.appendChild(prevBtn);
+
+    // Page number buttons
+    for (let i = 1; i <= totalPages; i++) {
+      const pageBtn = document.createElement('button');
+      pageBtn.textContent = i;
+      pageBtn.classList.toggle('active', i === currentPage);
+      pageBtn.addEventListener('click', () => {
+        currentPage = i;
+        renderCardList();
+      });
+      paginationControls.appendChild(pageBtn);
+    }
+
+    // Next button
+    const nextBtn = document.createElement('button');
+    nextBtn.textContent = 'Next';
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.addEventListener('click', () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderCardList();
+      }
+    });
+    paginationControls.appendChild(nextBtn);
+  }
+
+  /**
+   * Handles the form submission for adding or updating a memory card.
+   * @param {Event} event - The form submit event.
+   */
+  async function addOrUpdateCard(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    const imageURL = imageURLInput.value.trim();
+    const nameOfPainting = nameOfPaintingInput.value.trim();
+    const painter = painterInput.value.trim();
+    const location = locationInput.value.trim();
+
+    // Basic input validation
+    if (!imageURL || !nameOfPainting || !painter || !location) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
+    if (!isValidURL(imageURL)) {
+      alert('Please enter a valid image URL.');
+      return;
+    }
+
+    const cardData = {
+      imageSide: imageURL,
+      textSide: {
+        name: nameOfPainting,
+        painter: painter,
+        location: location,
+      },
+    };
+
+    if (currentEditCardId !== null) {
+      // Logic for editing an existing card
+      try {
+        await db.cards.update(currentEditCardId, cardData);
+        console.log('Card updated:', currentEditCardId);
+      } catch (error) {
+        console.error('Error updating card:', error);
+        alert('Failed to update card. Please try again.');
+        return;
+      }
+      saveCardBtn.textContent = 'Add Card'; // Change button text back
+      cancelEditBtn.classList.add('hidden'); // Hide cancel button
+      currentEditCardId = null; // Clear edit state
+      // currentPage remains unchanged here, keeping the user on the same page
+    } else {
+      // Logic for adding a new card
+      try {
+        await db.cards.add(cardData);
+        console.log('Card added.');
+      } catch (error) {
+        console.error('Error adding card:', error);
+        alert('Failed to add card. Please try again.');
+        return;
+      }
+      currentPage = 1; // Reset to first page for new additions
+    }
+
+    await renderCardList(); // Re-render the list, applying any current filter
+    cardForm.reset(); // Clear form fields
+  }
+
+  /**
+   * Populates the form with data of the card to be edited.
+   * @param {number} id - The ID of the card to edit (number because Dexie auto-increments).
+   */
+  async function editCard(id) {
+    const cardToEdit = await db.cards.get(id);
+    if (cardToEdit) {
+      currentEditCardId = id; // Set the current edit ID
+      imageURLInput.value = cardToEdit.imageSide;
+      nameOfPaintingInput.value = cardToEdit.textSide.name;
+      painterInput.value = cardToEdit.textSide.painter;
+      locationInput.value = cardToEdit.textSide.location;
+
+      saveCardBtn.textContent = 'Update Card'; // Change button text
+      cancelEditBtn.classList.remove('hidden'); // Show cancel button
+    } else {
+      console.error('Card not found for editing:', id);
+      alert('Card not found for editing.');
+    }
+  }
+
+  /**
+   * Deletes a memory card after user confirmation.
+   * @param {number} id - The ID of the card to delete.
+   */
+  async function deleteCard(id) {
+    if (confirm('Are you sure you want to delete this card?')) {
+      try {
+        await db.cards.delete(id);
+        console.log('Card deleted:', id);
+
+        // After deletion, re-evaluate current page to prevent being on an empty page
+        const totalCardsAfterDeletion = await db.cards.count();
+        const totalPagesAfterDeletion = Math.ceil(
+          totalCardsAfterDeletion / cardsPerPage
+        );
+        if (currentPage > totalPagesAfterDeletion && totalPagesAfterDeletion > 0) {
+          currentPage = totalPagesAfterDeletion;
+        } else if (totalPagesAfterDeletion === 0) {
+          currentPage = 1; // If no cards left, reset to page 1
+        }
+        await renderCardList(); // Re-render the list, applying any current filter
+      } catch (error) {
+        console.error('Error deleting card:', error);
+        alert('Failed to delete card. Please try again.');
+      }
+    }
+  }
+
+  /**
+   * Resets the card creation/edit form and hides the cancel button.
+   */
+  function cancelEdit() {
+    cardForm.reset();
+    currentEditCardId = null;
+    saveCardBtn.textContent = 'Add Card';
+    cancelEditBtn.classList.add('hidden');
+  }
+
+  // --- Play Section Functions ---
+
+  /**
+   * Renders a maximum of 10 random memory cards in the play section.
+   */
+  async function renderPlayCards() {
+    memoryCardsGrid.innerHTML = ''; // Clear existing cards
+    playErrorMessage.classList.add('hidden'); // Hide any previous error messages
+
+    let allCardsInDB = await db.cards.toArray();
+
+    if (allCardsInDB.length === 0) {
+      playErrorMessage.textContent =
+        'No cards added yet. Please go to the Admin section to create some!';
+      playErrorMessage.classList.remove('hidden');
+      return;
+    }
+
+    // Shuffle cards and take up to 10
+    const shuffledCards = [...allCardsInDB].sort(() => 0.5 - Math.random());
+    const cardsToDisplay = shuffledCards.slice(0, 10);
+
+    if (cardsToDisplay.length === 0) {
+      playErrorMessage.textContent = 'Something went wrong. No cards selected for display.';
+      playErrorMessage.classList.remove('hidden');
+      return;
+    } else if (cardsToDisplay.length < 10 && cardsToDisplay.length > 0) {
+      playErrorMessage.textContent = `Displaying ${cardsToDisplay.length} cards. Add more cards in Admin to get a full set of 10.`;
+      playErrorMessage.classList.remove('hidden');
+    }
+
+    cardsToDisplay.forEach((card) => {
+      const cardElement = document.createElement('div');
+      cardElement.classList.add('memory-card');
+      cardElement.setAttribute('data-id', card.id);
+
+      const cardInner = document.createElement('div');
+      cardInner.classList.add('memory-card-inner');
+
+      // Front side of the card (Image)
+      const cardFront = document.createElement('div');
+      cardFront.classList.add('memory-card-front');
+      const img = document.createElement('img');
+      img.src = card.imageSide;
+      img.alt = 'Memory Card Image';
+      cardFront.appendChild(img);
+
+      // Back side of the card (Text)
+      const cardBack = document.createElement('div');
+      cardBack.classList.add('memory-card-back');
+      cardBack.innerHTML = `
+            <p class="painting-name">${card.textSide.name}</p>
+            <p class="painter-name">${card.textSide.painter}</p>
+            <hr> <p class="location-name">${card.textSide.location}</p>
+        `;
+
+      cardInner.appendChild(cardFront);
+      cardInner.appendChild(cardBack);
+      cardElement.appendChild(cardInner);
+
+      // Determine image orientation and add class for CSS sizing
+      getOrientationClass(card.imageSide, (orientationClass) => {
+        cardElement.classList.add(orientationClass);
+      });
+
+      // Add click listener to flip the card
+      cardElement.addEventListener('click', () => {
+        cardElement.classList.toggle('flipped');
+      });
+
+      memoryCardsGrid.appendChild(cardElement);
+    });
+  }
+
+  // --- NEW: Export/Import Functions ---
+
+  /**
+   * Exports all data from the Dexie.js database to a JSON file.
+   */
+  async function exportData() {
+    try {
+      const allCards = await db.cards.toArray();
+      const dataStr = JSON.stringify(allCards, null, 2); // Pretty print JSON
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'memory_cards_data.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      alert('Data exported successfully!');
+    } catch (error) {
+      console.error('Error exporting data:', error);
+      alert('Failed to export data. Please try again.');
+    }
+  }
+
+  /**
+   * Imports data from a selected JSON file into the Dexie.js database.
+   * Warns the user about overwriting existing data.
+   */
+  async function importData(event) {
+    const file = event.target.files[0];
+    if (!file) {
+      return;
+    }
+
+    if (!confirm('Importing data will replace all existing memory cards. Are you sure you want to continue?')) {
+      event.target.value = ''; // Clear the input so the same file can be selected again
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const importedCards = JSON.parse(e.target.result);
+
+        if (!Array.isArray(importedCards)) {
+          alert('Invalid JSON format. Expected an array of card objects.');
+          return;
+        }
+
+        // Validate structure of imported cards (optional but recommended)
+        const isValidImport = importedCards.every(card =>
+          typeof card.imageSide === 'string' &&
+          typeof card.textSide === 'object' &&
+          typeof card.textSide.name === 'string' &&
+          typeof card.textSide.painter === 'string' &&
+          typeof card.textSide.location === 'string'
+        );
+
+        if (!isValidImport) {
+          alert('Invalid card data structure in the JSON file. Please ensure it matches the expected format.');
+          return;
+        }
+
+        // Clear existing data and then bulk add new data
+        await db.cards.clear(); // Clear all existing cards
+        // Remove 'id' property from imported cards if they have them,
+        // to let Dexie assign new auto-incremented IDs during bulkAdd
+        const cardsWithoutIds = importedCards.map(card => {
+            const { id, ...rest } = card; // Destructure to exclude id
+            return rest;
+        });
+        await db.cards.bulkAdd(cardsWithoutIds);
+        alert('Data imported successfully!');
+        currentPage = 1; // Reset to first page after import
+        await renderCardList(); // Re-render the list to show imported data
+        event.target.value = ''; // Clear the input
+      } catch (error) {
+        console.error('Error importing data:', error);
+        alert('Failed to import data. Please ensure the file is a valid JSON and formatted correctly.');
+        event.target.value = ''; // Clear the input
+      }
+    };
+    reader.readAsText(file);
+  }
+
+
+  // --- Event Listeners ---
+
+  // Navigation Buttons
+  adminBtn.addEventListener('click', async () => {
+    showSection(adminSection);
+    cardSearchInput.value = ''; // Clear search on section change
+    currentPage = 1; // Reset to first page when entering admin
+    await renderCardList(); // Ensure data is loaded
+    cancelEdit(); // Reset form when entering admin section
+  });
+
+  playBtn.addEventListener('click', async () => {
+    showSection(playSection);
+    await renderPlayCards(); // Ensure data is loaded
+  });
+
+  // Admin Form Actions
+  cardForm.addEventListener('submit', addOrUpdateCard);
+  cancelEditBtn.addEventListener('click', cancelEdit);
+
+  // Event delegation for Edit and Delete buttons in the card list
+  cardListDiv.addEventListener('click', async (event) => {
+    const target = event.target;
+    const cardItem = target.closest('.card-item');
+
+    if (!cardItem) return;
+
+    // Dexie's auto-incremented IDs are numbers, so parse it
+    const cardId = parseInt(cardItem.getAttribute('data-id'), 10);
+
+    if (target.closest('.edit-btn')) {
+      await editCard(cardId);
+    } else if (target.closest('.delete-btn')) {
+      await deleteCard(cardId);
+    }
+  });
+
+  // Search input event listener
+  cardSearchInput.addEventListener('input', async () => {
+    currentPage = 1; // Reset to first page on new search
+    await renderCardList();
+  });
+
+  // --- NEW: Export/Import Event Listeners ---
+  exportDataBtn.addEventListener('click', exportData);
+  importDataInput.addEventListener('change', importData);
+
+
+  // --- Initial Load ---
+  // Default view should be the Admin section when the page loads
+  showSection(adminSection);
+
+  // Initial render of the card list, now asynchronous
+  await renderCardList();
+});
