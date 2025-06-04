@@ -1,95 +1,104 @@
+/* General Body Styles */
 body {
   font-family: 'Arial', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f4;
+  background-color: #f4f7f6;
   color: #333;
+  line-height: 1.6;
 }
 
+/* Header Styles */
 .main-header {
-  background-color: #4caf50;
-  color: white;
+  background-color: #343a40;
+  color: #ffffff;
   padding: 15px 20px;
-  text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .main-header h1 {
   margin: 0;
-  font-size: 2em;
+  font-size: 1.8em;
 }
 
-nav {
-  margin-top: 10px;
-}
-
-nav button {
+.main-header nav button {
   background-color: #007bff;
   color: white;
   border: none;
-  padding: 10px 20px;
-  margin: 0 5px;
+  padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 1em;
   transition: background-color 0.3s ease;
+  margin-left: 10px;
 }
 
-nav button:hover {
+.main-header nav button:hover {
   background-color: #0056b3;
 }
 
+/* Main Content Area */
 main {
   padding: 20px;
-  max-width: 1200px;
-  margin: 20px auto;
-  background-color: white;
+  max-width: 1200px; /* Limit content width */
+  margin: 20px auto; /* Center content */
+  background-color: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 section {
   margin-bottom: 30px;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #fff;
 }
 
-section h2,
-section h3 {
-  color: #4caf50;
-  border-bottom: 2px solid #eee;
+section h2 {
+  color: #343a40;
+  margin-bottom: 20px;
+  margin-top: 0;
+  border-bottom: 2px solid #e9ecef;
   padding-bottom: 10px;
-  /* margin-bottom: 20px; This will be handled by .card-list-header's margin for h3 in that specific context */
+  font-size: 1.7em;
 }
 
-/* Admin Section Styling */
+/* Hidden Utility Class */
+.hidden {
+  display: none !important;
+}
+
+/* Admin Section - Card Form */
 .card-form-container {
-  background-color: #e9ffe9;
+  background-color: #ddeaf7;
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 30px;
-  border: 1px dashed #aaffaa;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* NEW: Two-column layout for form */
+.card-form-container h3 {
+  margin-top: 0;
+  color: #495057;
+  font-size: 1.3em;
+  margin-bottom: 20px;
+}
+
 .card-form-wrapper {
   display: flex;
-  gap: 20px; /* Space between columns */
-  margin-bottom: 20px; /* Space below the wrapper */
+  gap: 20px;
   flex-wrap: wrap; /* Allow columns to wrap on smaller screens */
 }
 
 .form-left-column {
-  flex: 2; /* Takes 2 parts of available space */
+  flex: 2; /* Takes remaining space */
   min-width: 280px; /* Minimum width before wrapping */
 }
 
 .form-right-column {
-  flex: 1; /* Takes 1 part of available space */
-  min-width: 200px; /* Minimum width before wrapping */
-  display: flex; /* Use flex to center preview content */
+  flex: 1;
+  min-width: 200px;
+  display: flex;
   align-items: center;
   justify-content: center;
 }
@@ -102,58 +111,59 @@ section h3 {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
+  color: #555;
 }
 
 .form-group input[type='text'],
 .form-group input[type='url'] {
-  width: calc(100% - 22px); /* Account for padding and border */
+  width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #ced4da;
   border-radius: 4px;
+  box-sizing: border-box; /* Include padding in width */
   font-size: 1em;
 }
 
-/* NEW: Image preview styling */
+.form-group input[type='text']:focus,
+.form-group input[type='url']:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+/* Image Preview */
 .preview-image-container {
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 10px;
   text-align: center;
   background-color: #f0f0f0;
-  width: 100%; /* Take full width of its column */
-  height: 200px; /* Fixed height for consistency */
+  width: 100%;
+  height: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow: hidden; /* Hide overflowing parts of the image */
+  overflow: hidden;
 }
 
-.preview-image-container p {
-  margin: 0;
-  color: #777;
-  font-style: italic;
-}
-
-#previewImage {
+.preview-image-container img {
   max-width: 100%;
-  max-height: 100%; /* Ensure image fits within the container */
-  object-fit: contain; /* Keep aspect ratio, fit inside */
+  max-height: 100%;
+  object-fit: contain;
   border-radius: 4px;
-  margin-top: 10px; /* Space above image */
+  margin-top: 10px;
 }
 
 .preview-message {
-  font-size: 0.9em;
-  color: #888;
+  color: #6c757d;
+  font-style: italic;
+  text-align: center;
 }
 
-::placeholder {
-  color: rgb(194, 192, 192);
-  opacity: 1; /* Firefox */
-}
-
-#cardForm button {
+/* Form Buttons */
+#saveCardBtn,
+#cancelEditBtn {
   background-color: #28a745;
   color: white;
   border: none;
@@ -162,195 +172,245 @@ section h3 {
   cursor: pointer;
   font-size: 1em;
   transition: background-color 0.3s ease;
-  margin-right: 10px;
+  margin-top: 10px; /* Spacing from form elements */
+  margin-right: 10px; /* Spacing between buttons */
 }
 
-#cardForm button:hover {
+#saveCardBtn:hover {
   background-color: #218838;
 }
 
 #cancelEditBtn {
-  background-color: #6c757d;
+  background-color: #dc3545;
 }
 
 #cancelEditBtn:hover {
-  background-color: #5a6268;
+  background-color: #c82333;
 }
 
+/* Admin Utility Buttons (Export/Import) */
+.admin-utility-btn {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  text-decoration: none; /* For label acting as button */
+  display: inline-block; /* For label acting as button */
+}
+#exportDataBtn {
+  background-color: #007bff;
+  color: white;
+}
+
+#exportDataBtn:hover {
+  background-color: #138496 !important;
+}
+#importDataInput:hover + label {
+  /* Apply hover to label */
+  background-color: #e0a800 !important;
+}
+
+/* Card List Header and Search */
 .card-list-header {
   display: flex;
-  justify-content: space-between; /* Pushes content to opposite ends */
-  align-items: baseline; /* Aligns items based on their text baseline */
-  margin-bottom: 15px; /* Add some space below the header and the list */
-  padding-bottom: 10px; /* Aligns with original section h3 padding */
-  border-bottom: 2px solid #eee; /* Aligns with original section h3 border */
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 10px;
 }
 
 .card-list-header h3 {
-  margin: 0; /* Remove default margin from h3 for better alignment within flex */
-  color: #4caf50; /* Keep the green color */
-  padding-bottom: 0; /* No extra padding here as it's on the container */
-  border-bottom: none; /* No border here as it's on the container */
+  margin: 0;
+  color: #495057;
+  font-size: 1.3em;
 }
 
 #totalCardsCount {
-  /* Styling for the total cards count */
   font-weight: bold;
-  color: #007bff; /* A prominent color for the count */
-  font-size: 1.1em;
+  color: #6c757d;
 }
 
-/* Search Box Styling */
 .search-container {
-  position: relative; /* Allows positioning of the icon */
-  margin-bottom: 20px; /* Space below the search box */
+  position: relative;
+  margin-bottom: 20px;
 }
 
 #cardSearchInput {
-  width: calc(100% - 55px); /* Adjust width to make space for the icon */
-  padding: 10px 15px 10px 40px; /* Left padding for icon */
-  border: 1px solid #ccc;
-  border-radius: 25px; /* Rounded corners for a modern look */
+  width: 100%;
+  padding: 10px 40px 10px 15px; /* Adjust padding for icon */
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  box-sizing: border-box;
   font-size: 1em;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08); /* Subtle inner shadow */
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-#cardSearchInput:focus {
-  border-color: #007bff;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08),
-    0 0 5px rgba(0, 123, 255, 0.2);
-  outline: none; /* Remove default focus outline */
 }
 
 .search-icon {
   position: absolute;
-  left: 15px; /* Position the icon inside the input field */
+  right: 15px;
   top: 50%;
   transform: translateY(-50%);
-  color: #888;
-  font-size: 1.1em;
+  color: #6c757d;
 }
 
+/* Card List Display (Admin) - NEW GRID STYLES HERE */
 .card-list {
-  margin-top: 0; /* Adjusted since .card-list-header now handles top spacing */
+  display: grid; /* Enable CSS Grid */
+  grid-template-columns: repeat(2, 1fr); /* Two columns, equal width */
+  gap: 20px; /* Space between grid items */
+  margin-top: 20px;
 }
 
 .card-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 15px;
-  border: 1px solid #eee;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  background-color: #f9f9f9;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease-in-out;
+}
+
+.card-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .card-info {
-  flex-grow: 1;
-  display: flex; /* Use flex to align image and text */
+  display: flex;
   align-items: center;
+  flex-grow: 1; /* Allow info to take available space */
 }
 
 .card-info img {
-  max-width: 80px;
-  max-height: 80px;
-  object-fit: contain;
-  border: 1px solid #ddd;
+  width: 80px; /* Fixed width for thumbnail */
+  height: 80px; /* Fixed height for thumbnail */
+  object-fit: cover; /* Crop to fit, maintain aspect ratio */
   border-radius: 4px;
   margin-right: 15px;
-  flex-shrink: 0; /* Prevent image from shrinking */
+  border: 1px solid #ddd;
+}
+
+.card-info span {
+  font-size: 0.9em;
+  color: #495057;
+}
+
+.card-info span strong {
+  font-size: 1.1em;
+  color: #343a40;
 }
 
 .card-actions {
   display: flex;
   gap: 10px;
+  margin-left: 15px; /* Spacing from info */
 }
 
 .card-actions button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.2em;
-  padding: 5px;
-  color: #007bff;
-  transition: color 0.2s ease;
-}
-
-.card-actions button.delete-btn {
-  color: #dc3545;
-}
-
-.card-actions button:hover {
-  color: #0056b3;
-}
-.card-actions button.delete-btn:hover {
-  color: #c82333;
-}
-
-/* Pagination Controls */
-.pagination-controls {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-  gap: 5px; /* Space between buttons */
-}
-
-.pagination-controls button {
-  background-color: #007bff;
+  background-color: #6c757d;
   color: white;
   border: none;
   padding: 8px 12px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9em;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  min-width: 35px; /* Ensure consistent width for page numbers */
+  transition: background-color 0.3s ease;
 }
 
-.pagination-controls button:hover:not(.active) {
+.card-actions button:hover {
+  background-color: #5a6268;
+}
+
+.card-actions .edit-btn {
+  background-color: #ffc107;
+  color: #333;
+}
+.card-actions .edit-btn:hover {
+  background-color: #e0a800;
+}
+
+.card-actions .delete-btn {
+  background-color: #dc3545;
+}
+.card-actions .delete-btn:hover {
+  background-color: #c82333;
+}
+
+#noCardsMessage {
+  text-align: center;
+  font-style: italic;
+  color: #6c757d;
+  padding: 20px;
+  border: 1px dashed #ced4da;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+/* Pagination Controls */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  gap: 8px;
+}
+
+.pagination-controls button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+}
+
+.pagination-controls button:hover:not(:disabled) {
   background-color: #0056b3;
-  transform: translateY(-2px);
-}
-
-.pagination-controls button.active {
-  background-color: #4caf50; /* Highlight active page */
-  font-weight: bold;
-  cursor: default; /* No hover effect on active button */
 }
 
 .pagination-controls button:disabled {
-  background-color: #cccccc;
+  background-color: #a0c9f1;
   cursor: not-allowed;
 }
 
-/* Play Section Styling - Masonry-like Grid */
+.pagination-controls button.active {
+  background-color: #4caf50;
+  font-weight: bold;
+}
+
+/* Play Section - Memory Cards Grid */
 .memory-cards-grid {
   display: grid;
-  /* This creates a fluid grid that will have as many columns as can fit,
-     each column being at least 200px wide. */
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 15px;
-  padding: 10px;
-  /* Add this for potential masonry layout improvements if items vary wildly in height */
-  grid-auto-rows: minmax(
-    100px,
-    auto
-  ); /* Allows rows to auto-adjust but ensures minimum height */
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(150px, 1fr)
+  ); /* Responsive grid */
+  gap: 20px;
+  padding: 20px 0;
+  justify-content: center; /* Center cards if they don't fill the row */
 }
 
 .memory-card {
-  background-color: #fff;
+  perspective: 1000px; /* For 3D flip effect */
+  height: 180px; /* Fixed height for memory cards */
+  cursor: pointer;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  perspective: 1000px; /* For 3D flip effect */
-  cursor: pointer;
-  height: auto; /* Allow height to adjust based on content */
-  overflow: hidden; /* Hide overflow from image */
-  display: flex; /* Helps ensure inner content fills card */
-  flex-direction: column; /* For proper internal layout */
+  transition: transform 0.6s;
+  position: relative;
+}
+
+.memory-card.flipped .memory-card-inner {
+  transform: rotateY(180deg);
 }
 
 .memory-card-inner {
@@ -359,11 +419,8 @@ section h3 {
   height: 100%;
   text-align: center;
   transition: transform 0.6s;
-  transform-style: preserve-3d; /* Keep 3D transform */
-}
-
-.memory-card.flipped .memory-card-inner {
-  transform: rotateY(180deg);
+  transform-style: preserve-3d;
+  border-radius: 8px;
 }
 
 .memory-card-front,
@@ -371,223 +428,125 @@ section h3 {
   position: absolute;
   width: 100%;
   height: 100%;
-  -webkit-backface-visibility: hidden; /* Hide back of element when facing away */
-  backface-visibility: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  backface-visibility: hidden; /* Hide the back when rotated */
   border-radius: 8px;
-  overflow: hidden; /* Ensure content stays within bounds */
-  box-sizing: border-box; /* Include padding in element's total width and height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .memory-card-front {
-  background-color: #f0f0f0;
-  color: black;
-  padding: 5px; /* Small padding so image doesn't touch edges */
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  color: #333;
+  overflow: hidden;
 }
 
 .memory-card-front img {
   max-width: 100%;
   max-height: 100%;
-  object-fit: contain; /* Ensures the whole image is visible */
-  display: block; /* Remove extra space below image */
+  object-fit: contain; /* Ensure image fits and maintains aspect ratio */
 }
 
 .memory-card-back {
-  background-color: #e0f7fa; /* Light blue for text side */
-  color: #333;
+  background-color: #007bff;
+  color: white;
   transform: rotateY(180deg);
-  padding: 15px;
-  text-align: center; /* Center align text */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center; /* Center items horizontally */
+  border: 1px solid #0056b3;
 }
 
 .memory-card-back p {
   margin: 5px 0;
   font-size: 0.9em;
-  word-break: break-word; /* Prevent long words from overflowing */
-  text-wrap: balance; /* Modern property for better text wrapping */
+  line-height: 1.2;
 }
 
 .memory-card-back p.painting-name {
-  font-size: 1.1em; /* Slightly larger for emphasis */
   font-weight: bold;
-  color: #0056b3; /* A slightly darker blue for the name */
-  margin-bottom: 8px; /* More space below the name */
-}
-
-.memory-card-back p.painter-name {
-  margin-top: 8px; /* More space above painter */
-  margin-bottom: 5px;
-}
-
-.memory-card-back p.location-name {
-  font-style: italic;
-  color: #555;
-  margin-top: 5px;
+  font-size: 1.1em;
 }
 
 .memory-card-back hr {
-  width: 60%; /* Adjust width of the horizontal line */
-  border: 0;
-  height: 1px;
-  background-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0),
-    rgba(0, 0, 0, 0.25),
-    rgba(0, 0, 0, 0)
-  );
-  margin: 10px 0; /* Space around the line */
+  border-color: rgba(255, 255, 255, 0.5);
+  width: 80%;
+  margin: 8px 0;
 }
 
-/* Orientation specific styles for Play section */
-/* These aspect ratios help in creating a consistent grid appearance for different image orientations */
-.memory-card.portrait {
-  aspect-ratio: 3 / 4; /* Typical portrait aspect ratio */
+/* Image Orientation Classes for Play Cards */
+.memory-card.portrait .memory-card-front img {
+  object-fit: contain; /* Default is fine, adjust if needed */
+}
+.memory-card.landscape .memory-card-front img {
+  object-fit: contain; /* Default is fine, adjust if needed */
+}
+.memory-card.square .memory-card-front img {
+  object-fit: contain; /* Default is fine, adjust if needed */
 }
 
-.memory-card.landscape {
-  aspect-ratio: 4 / 3; /* Typical landscape aspect ratio */
-}
-
-.memory-card.square {
-  aspect-ratio: 1 / 1;
-}
-
-/* Utility Classes */
-.hidden {
-  display: none !important;
+#playErrorMessage {
+  text-align: center;
+  color: #dc3545;
+  font-weight: bold;
+  padding: 20px;
+  border: 1px dashed #dc3545;
+  border-radius: 5px;
+  margin-top: 20px;
 }
 
 .message-prompt {
-  background-color: #ffc107;
-  color: #333;
-  padding: 15px;
-  border-radius: 5px;
-  margin-top: 20px;
-  text-align: center;
-  font-weight: bold;
+  font-style: italic;
+  color: #6c757d;
 }
 
-/* Responsive adjustments for the grid */
-@media (max-width: 768px) {
-  .memory-cards-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 10px;
-  }
-  nav button {
-    padding: 8px 15px;
-    font-size: 0.9em;
-  }
-
-  /* Adjust form columns for smaller screens */
-  .card-form-wrapper {
-    flex-direction: column; /* Stack columns vertically */
-  }
-}
-
-@media (max-width: 480px) {
-  nav button {
-    display: block;
-    width: calc(100% - 10px);
-    margin: 5px auto;
-  }
-  .memory-cards-grid {
-    grid-template-columns: 1fr; /* Single column on very small screens */
-  }
-  main {
-    padding: 10px;
-    margin: 10px auto;
-  }
-  section {
-    padding: 15px;
-  }
-}
-
-/* style.css for export and import buttons */
-.admin-utility-btn {
-  margin-left: 10px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1em;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-#exportDataBtn {
-  background-color: #17a2b8; /* Info blue */
-  color: white;
-}
-
-#exportDataBtn:hover {
-  background-color: #138496;
-}
-
-#importDataLabel {
-  background-color: #ffc107; /* Warning yellow */
-  color: #333;
-}
-
-#importDataLabel:hover {
-  background-color: #e0a800;
-}
-
-/* Toast Notification Styling */
+/* Toast Notifications */
 .toast-container {
   position: fixed;
-  bottom: 20px; /* Distance from bottom */
-  right: 20px; /* Distance from right */
-  z-index: 1000; /* Ensure it's above other content */
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
   display: flex;
-  flex-direction: column-reverse; /* New toasts appear above older ones */
-  gap: 10px; /* Space between multiple toasts */
+  flex-direction: column;
+  gap: 10px;
 }
 
 .toast {
   background-color: #333;
   color: white;
-  padding: 15px 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  opacity: 0; /* Start hidden */
-  transform: translateY(20px); /* Start slightly below final position */
-  animation: fadeSlideIn 0.5s forwards, fadeOut 0.5s 2.5s forwards; /* Animation sequence */
-  min-width: 250px;
-  max-width: 350px;
-  font-size: 0.95em;
+  padding: 10px 15px;
+  border-radius: 5px;
   display: flex;
   align-items: center;
-  gap: 10px; /* Space between icon and text */
+  gap: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.5s forwards, fadeOut 0.5s forwards 2.5s; /* Fade in, then fade out after 2.5s delay */
 }
 
-/* Specific styles for different toast types */
+.toast-icon {
+  font-size: 1.2em;
+}
+
 .toast.success {
-  background-color: #28a745; /* Green */
+  background-color: #28a745;
 }
-
 .toast.error {
-  background-color: #dc3545; /* Red */
+  background-color: #dc3545;
 }
-
 .toast.info {
-  background-color: #007bff; /* Blue */
+  background-color: #17a2b8;
 }
-
 .toast.warning {
-  background-color: #ffc107; /* Yellow */
-  color: #333; /* Dark text for yellow background */
+  background-color: #ffc107;
+  color: #333;
 }
 
-.toast .toast-icon {
-  font-size: 1.3em;
-}
-
-@keyframes fadeSlideIn {
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
   to {
     opacity: 1;
     transform: translateY(0);
@@ -605,20 +564,64 @@ section h3 {
   }
 }
 
-/* Responsive adjustment for toasts */
-@media (max-width: 600px) {
-  .toast-container {
-    bottom: 10px;
-    right: 10px;
-    left: 10px; /* Occupy full width on small screens */
-    flex-direction: column-reverse;
-    align-items: center; /* Center toasts horizontally */
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .main-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  .main-header nav {
+    margin-top: 10px;
+  }
+  .main-header nav button {
+    margin: 5px;
   }
 
-  .toast {
-    width: calc(100% - 20px); /* Adjust width for padding */
-    min-width: unset;
-    max-width: unset;
-    font-size: 0.9em;
+  .card-form-wrapper {
+    flex-direction: column; /* Stack columns vertically on smaller screens */
+  }
+
+  .form-left-column,
+  .form-right-column {
+    min-width: unset; /* Remove min-width constraints */
+    flex-basis: auto;
+  }
+
+  /* Admin card list reverts to single column on smaller screens */
+  .card-list {
+    grid-template-columns: 1fr; /* Single column */
+  }
+}
+
+@media (max-width: 480px) {
+  main {
+    padding: 10px;
+    margin: 10px auto;
+  }
+  section h2 {
+    font-size: 1.5em;
+  }
+  .card-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .card-info {
+    margin-bottom: 10px;
+  }
+  .card-actions {
+    width: 100%;
+    justify-content: flex-end;
+    margin-left: 0;
+  }
+
+  .memory-cards-grid {
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(120px, 1fr)
+    ); /* Smaller cards on tiny screens */
+    gap: 15px;
+  }
+  .memory-card {
+    height: 150px;
   }
 }
