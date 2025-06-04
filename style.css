@@ -1,22 +1,48 @@
+/* Variables for easier theme management */
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --accent-color: #e98926;
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --info-color: #17a2b8;
+
+  --header-bg: #343a40;
+  --body-bg: #f4f7f6;
+  --card-bg: #ffffff;
+  --form-bg: #e9ecef;
+  --text-color: #333;
+  --light-text-color: #f8f9fa;
+  --border-color: #ced4da;
+  --light-border-color: #e9ecef;
+
+  --spacing-unit: 10px;
+  --border-radius: 8px;
+  --box-shadow-light: 0 2px 5px rgba(0, 0, 0, 0.2);
+  --box-shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --box-shadow-inset: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
 /* General Body Styles */
 body {
   font-family: 'Arial', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f7f6;
-  color: #333;
+  background-color: var(--body-bg);
+  color: var(--text-color);
   line-height: 1.6;
 }
 
-/* Header Styles */
+/* --- Header Styles --- */
 .main-header {
-  background-color: #343a40;
-  color: #ffffff;
-  padding: 15px 20px;
+  background-color: var(--header-bg);
+  color: var(--light-text-color);
+  padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--box-shadow-light);
 }
 
 .main-header h1 {
@@ -25,73 +51,73 @@ body {
 }
 
 .main-header nav button {
-  background-color: #007bff;
-  color: white;
+  background-color: var(--primary-color);
+  color: white; /* Always white for primary buttons */
   border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
+  padding: var(--spacing-unit) calc(var(--spacing-unit) * 1.5);
+  border-radius: var(--border-radius) / 2; /* Half of general border-radius */
   cursor: pointer;
   font-size: 1em;
   transition: background-color 0.3s ease;
-  margin-left: 10px;
+  margin-left: var(--spacing-unit);
 }
 
 .main-header nav button:hover {
-  background-color: #0056b3;
+  background-color: #0056b3; /* Darker shade of primary color */
 }
 
-/* Main Content Area */
+/* --- Main Content Area --- */
 main {
-  padding: 20px;
-  max-width: 1200px; /* Limit content width */
-  margin: 20px auto; /* Center content */
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: calc(var(--spacing-unit) * 2);
+  max-width: 1200px;
+  margin: calc(var(--spacing-unit) * 2) auto;
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: 0 0 var(--spacing-unit) rgba(0, 0, 0, 0.1);
 }
 
 section {
-  margin-bottom: 30px;
+  margin-bottom: calc(var(--spacing-unit) * 3);
 }
 
 section h2 {
-  color: #343a40;
-  margin-bottom: 20px;
-  border-bottom: 2px solid #e9ecef;
-  padding-bottom: 10px;
+  color: var(--header-bg);
+  margin-bottom: calc(var(--spacing-unit) * 2);
+  border-bottom: 2px solid var(--light-border-color);
+  padding-bottom: var(--spacing-unit);
   font-size: 1.7em;
 }
 
-/* Hidden Utility Class */
+/* Utility Class */
 .hidden {
   display: none !important;
 }
 
-/* Admin Section - Card Form */
+/* --- Admin Section - Card Form --- */
 .card-form-container {
-  background-color: #e9ecef;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 30px;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: var(--form-bg);
+  padding: calc(var(--spacing-unit) * 2);
+  border-radius: var(--border-radius);
+  margin-bottom: calc(var(--spacing-unit) * 3);
+  box-shadow: var(--box-shadow-inset);
 }
 
 .card-form-container h3 {
   margin-top: 0;
-  color: #495057;
+  color: var(--secondary-color);
   font-size: 1.3em;
-  margin-bottom: 20px;
+  margin-bottom: calc(var(--spacing-unit) * 2);
 }
 
 .card-form-wrapper {
   display: flex;
-  gap: 20px;
-  flex-wrap: wrap; /* Allow columns to wrap on smaller screens */
+  gap: calc(var(--spacing-unit) * 2);
+  flex-wrap: wrap;
 }
 
 .form-left-column {
-  flex: 2; /* Takes remaining space */
-  min-width: 280px; /* Minimum width before wrapping */
+  flex: 2;
+  min-width: 280px;
 }
 
 .form-right-column {
@@ -103,40 +129,40 @@ section h2 {
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: calc(var(--spacing-unit) * 1.5);
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: calc(var(--spacing-unit) / 2);
   font-weight: bold;
-  color: #555;
+  color: #555; /* Specific shade for labels */
 }
 
 .form-group input[type='text'],
 .form-group input[type='url'] {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  box-sizing: border-box; /* Include padding in width */
+  padding: var(--spacing-unit);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius) / 2;
+  box-sizing: border-box;
   font-size: 1em;
 }
 
 .form-group input[type='text']:focus,
 .form-group input[type='url']:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Primary color with transparency */
   outline: none;
 }
 
 /* Image Preview */
 .preview-image-container {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 10px;
+  border: 1px solid #ddd; /* Specific shade for preview border */
+  border-radius: var(--border-radius);
+  padding: var(--spacing-unit);
   text-align: center;
-  background-color: #f0f0f0;
+  background-color: #f0f0f0; /* Light gray for preview background */
   width: 100%;
   height: 200px;
   display: flex;
@@ -150,12 +176,12 @@ section h2 {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-  border-radius: 4px;
-  margin-top: 10px;
+  border-radius: var(--border-radius) / 2;
+  margin-top: var(--spacing-unit);
 }
 
 .preview-message {
-  color: #6c757d;
+  color: var(--secondary-color);
   font-style: italic;
   text-align: center;
 }
@@ -163,245 +189,254 @@ section h2 {
 /* Form Buttons */
 #saveCardBtn,
 #cancelEditBtn {
-  background-color: #28a745;
-  color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
+  padding: var(--spacing-unit) calc(var(--spacing-unit) * 2);
+  border-radius: var(--border-radius) / 2;
   cursor: pointer;
   font-size: 1em;
   transition: background-color 0.3s ease;
-  margin-top: 10px; /* Spacing from form elements */
-  margin-right: 10px; /* Spacing between buttons */
+  margin-top: var(--spacing-unit);
+  margin-right: var(--spacing-unit);
+}
+
+#saveCardBtn {
+  background-color: var(--success-color);
+  color: white;
 }
 
 #saveCardBtn:hover {
-  background-color: #218838;
+  background-color: #218838; /* Darker shade of success color */
 }
 
 #cancelEditBtn {
-  background-color: #dc3545;
+  background-color: var(--danger-color);
+  color: white;
 }
 
 #cancelEditBtn:hover {
-  background-color: #c82333;
+  background-color: #c82333; /* Darker shade of danger color */
 }
 
 /* Admin Utility Buttons (Export/Import) */
 .admin-utility-btn {
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
+  padding: var(--spacing-unit) calc(var(--spacing-unit) * 2);
+  border-radius: var(--border-radius) / 2;
   cursor: pointer;
   font-size: 1em;
   transition: background-color 0.3s ease;
   text-align: center;
-  text-decoration: none; /* For label acting as button */
-  display: inline-block; /* For label acting as button */
+  text-decoration: none;
+  display: inline-block;
 }
 
 #exportDataBtn {
-  background-color: #17a2b8;
+  background-color: var(--info-color);
   color: white;
 }
 
 #exportDataBtn:hover {
-  background-color: #138496 !important;
+  background-color: #138496 !important; /* Darker shade of info color */
 }
 #importDataInput:hover + label {
-  /* Apply hover to label */
-  background-color: #e0a800 !important;
+  background-color: #e0a800 !important; /* Darker shade of warning color */
 }
 
-/* Card List Header and Search */
+/* --- Card List Header and Search --- */
 .card-list-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 30px;
-  margin-bottom: 15px;
-  border-bottom: 1px solid #e9ecef;
-  padding-bottom: 10px;
+  margin-top: calc(var(--spacing-unit) * 3);
+  margin-bottom: calc(var(--spacing-unit) * 1.5);
+  border-bottom: 1px solid var(--light-border-color);
+  padding-bottom: var(--spacing-unit);
 }
 
 .card-list-header h3 {
   margin: 0;
-  color: #495057;
+  color: var(--secondary-color);
   font-size: 1.3em;
 }
 
 #totalCardsCount {
   font-weight: bold;
-  color: #6c757d;
+  color: var(--secondary-color);
 }
 
 .search-container {
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: calc(var(--spacing-unit) * 2);
 }
 
 #cardSearchInput {
   width: 100%;
-  padding: 10px 40px 10px 15px; /* Adjust padding for icon */
-  border: 1px solid #ced4da;
-  border-radius: 4px;
+  padding: var(--spacing-unit) 40px var(--spacing-unit)
+    calc(var(--spacing-unit) * 1.5);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius) / 2;
   box-sizing: border-box;
   font-size: 1em;
 }
 
 .search-icon {
   position: absolute;
-  right: 15px;
+  right: calc(var(--spacing-unit) * 1.5);
   top: 50%;
   transform: translateY(-50%);
-  color: #6c757d;
+  color: var(--secondary-color);
+  /* Added for accessibility: ensures icon is not focusable if it's purely decorative */
+  pointer-events: none;
 }
 
 /* Card List Display (Admin) */
 .card-list {
-  display: grid; /* Enable CSS Grid */
-  grid-template-columns: repeat(2, 1fr); /* Two columns, equal width */
-  gap: 20px; /* Space between grid items */
-  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: calc(var(--spacing-unit) * 2);
+  margin-top: calc(var(--spacing-unit) * 2);
 }
 
 .card-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  padding: 15px;
+  background-color: var(
+    --light-text-color
+  ); /* Lighter background for card items */
+  border: 1px solid var(--light-border-color);
+  border-radius: var(--border-radius);
+  padding: calc(var(--spacing-unit) * 1.5);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .card-item:hover {
   transform: translateY(-3px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--box-shadow-medium);
 }
 
 .card-info {
   display: flex;
   align-items: center;
-  flex-grow: 1; /* Allow info to take available space */
+  flex-grow: 1;
 }
 
 .card-info img {
-  width: 80px; /* Fixed width for thumbnail */
-  height: 80px; /* Fixed height for thumbnail */
-  object-fit: cover; /* Crop to fit, maintain aspect ratio */
-  border-radius: 4px;
-  margin-right: 15px;
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: var(--border-radius) / 2;
+  margin-right: calc(var(--spacing-unit) * 1.5);
   border: 1px solid #ddd;
 }
 
 .card-info span {
   font-size: 0.9em;
-  color: #495057;
+  color: var(--secondary-color);
 }
 
 .card-info span strong {
   font-size: 1.1em;
-  color: #343a40;
+  color: var(--header-bg); /* Darker text for emphasis */
 }
 
 .card-actions {
   display: flex;
-  gap: 10px;
-  margin-left: 15px; /* Spacing from info */
+  gap: var(--spacing-unit);
+  margin-left: calc(var(--spacing-unit) * 1.5);
 }
 
 .card-actions button {
-  background-color: #6c757d;
+  background-color: var(--secondary-color);
   color: white;
   border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
+  padding: calc(var(--spacing-unit) * 0.8) calc(var(--spacing-unit) * 1.2);
+  border-radius: var(--border-radius) / 2;
   cursor: pointer;
   font-size: 0.9em;
   transition: background-color 0.3s ease;
 }
 
 .card-actions button:hover {
-  background-color: #5a6268;
+  background-color: #5a6268; /* Darker shade of secondary color */
 }
 
 .card-actions .edit-btn {
-  background-color: #ffc107;
-  color: #333;
+  background-color: var(--warning-color);
+  color: var(--text-color); /* Dark text for warning button */
 }
 .card-actions .edit-btn:hover {
-  background-color: #e0a800;
+  background-color: #e0a800; /* Darker shade of warning color */
 }
 
 .card-actions .delete-btn {
-  background-color: #dc3545;
+  background-color: var(--danger-color);
+  color: white;
 }
 .card-actions .delete-btn:hover {
-  background-color: #c82333;
+  background-color: #c82333; /* Darker shade of danger color */
 }
 
 #noCardsMessage {
   text-align: center;
   font-style: italic;
-  color: #6c757d;
-  padding: 20px;
-  border: 1px dashed #ced4da;
-  border-radius: 5px;
-  margin-top: 20px;
+  color: var(--secondary-color);
+  padding: calc(var(--spacing-unit) * 2);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--border-radius) / 2;
+  margin-top: calc(var(--spacing-unit) * 2);
 }
 
-/* Pagination Controls */
+/* --- Pagination Controls --- */
 .pagination-controls {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 30px;
-  gap: 8px;
+  margin-top: calc(var(--spacing-unit) * 3);
+  gap: calc(var(--spacing-unit) * 0.8);
 }
 
 .pagination-controls button {
-  background-color: #007bff;
+  background-color: var(--primary-color);
   color: white;
   border: none;
-  padding: 8px 15px;
-  border-radius: 4px;
+  padding: calc(var(--spacing-unit) * 0.8) calc(var(--spacing-unit) * 1.5);
+  border-radius: var(--border-radius) / 2;
   cursor: pointer;
   font-size: 0.9em;
   transition: background-color 0.3s ease;
 }
 
 .pagination-controls button:hover:not(:disabled) {
-  background-color: #0056b3;
+  background-color: #0056b3; /* Darker primary color */
 }
 
 .pagination-controls button:disabled {
-  background-color: #a0c9f1;
+  background-color: #a0c9f1; /* Lighter primary for disabled */
   cursor: not-allowed;
 }
 
 .pagination-controls button.active {
-  background-color: #28a745;
+  background-color: var(--success-color);
   font-weight: bold;
 }
 
-/* Play Section - Memory Cards Grid - MODIFIED FOR MAX 5 COLUMNS */
+/* --- Play Section - Memory Cards Grid --- */
 .memory-cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 15px;
-  padding: 10px;
+  gap: calc(var(--spacing-unit) * 1.5);
+  padding: var(--spacing-unit);
   grid-auto-rows: minmax(100px, auto);
 }
 
 .memory-card {
-  perspective: 1000px; /* For 3D flip effect */
-  height: 180px; /* Fixed height for memory cards */
+  perspective: 1000px;
+  height: 180px;
   cursor: pointer;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-medium);
   transition: transform 0.6s;
   position: relative;
 }
@@ -417,7 +452,7 @@ section h2 {
   text-align: center;
   transition: transform 0.6s;
   transform-style: preserve-3d;
-  border-radius: 8px;
+  border-radius: var(--border-radius);
 }
 
 .memory-card-front,
@@ -425,38 +460,38 @@ section h2 {
   position: absolute;
   width: 100%;
   height: 100%;
-  backface-visibility: hidden; /* Hide the back when rotated */
-  border-radius: 8px;
+  backface-visibility: hidden;
+  border-radius: var(--border-radius);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+  padding: var(--spacing-unit);
   box-sizing: border-box;
 }
 
 .memory-card-front {
-  background-color: #ffffff;
+  background-color: var(--card-bg);
   border: 1px solid #ddd;
-  color: #333;
+  color: var(--text-color);
   overflow: hidden;
 }
 
 .memory-card-front img {
   max-width: 100%;
   max-height: 100%;
-  object-fit: contain; /* Ensure image fits and maintains aspect ratio */
+  object-fit: contain;
 }
 
 .memory-card-back {
-  background-color: #e98926;
+  background-color: var(--accent-color);
   color: white;
   transform: rotateY(180deg);
-  border: 1px solid #b76007;
+  border: 1px solid #b76007; /* Darker shade of accent color */
 }
 
 .memory-card-back p {
-  margin: 5px 0;
+  margin: calc(var(--spacing-unit) / 2) 0;
   font-size: 0.9em;
   line-height: 1.2;
 }
@@ -476,56 +511,54 @@ section h2 {
     rgba(0, 0, 0, 0.25),
     rgba(0, 0, 0, 0)
   );
-  margin: 10px 0;
+  margin: var(--spacing-unit) 0;
 }
 
 /* Image Orientation Classes for Play Cards */
-.memory-card.portrait .memory-card-front img {
-  object-fit: contain; /* Default is fine, adjust if needed */
-}
-.memory-card.landscape .memory-card-front img {
-  object-fit: contain; /* Default is fine, adjust if needed */
-}
+/* These classes are generally not needed unless specific adjustments are required.
+   'object-fit: contain' usually handles different aspect ratios well. */
+.memory-card.portrait .memory-card-front img,
+.memory-card.landscape .memory-card-front img,
 .memory-card.square .memory-card-front img {
-  object-fit: contain; /* Default is fine, adjust if needed */
+  object-fit: contain;
 }
 
 #playErrorMessage {
   text-align: center;
-  color: #dc3545;
+  color: var(--danger-color);
   font-weight: bold;
-  padding: 20px;
-  border: 1px dashed #dc3545;
-  border-radius: 5px;
-  margin-top: 20px;
+  padding: calc(var(--spacing-unit) * 2);
+  border: 1px dashed var(--danger-color);
+  border-radius: var(--border-radius) / 2;
+  margin-top: calc(var(--spacing-unit) * 2);
 }
 
 .message-prompt {
   font-style: italic;
-  color: #6c757d;
+  color: var(--secondary-color);
 }
 
-/* Toast Notifications */
+/* --- Toast Notifications --- */
 .toast-container {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: calc(var(--spacing-unit) * 2);
+  right: calc(var(--spacing-unit) * 2);
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--spacing-unit);
 }
 
 .toast {
-  background-color: #333;
+  background-color: var(--text-color);
   color: white;
-  padding: 10px 15px;
-  border-radius: 5px;
+  padding: var(--spacing-unit) calc(var(--spacing-unit) * 1.5);
+  border-radius: var(--border-radius) / 2;
   display: flex;
   align-items: center;
-  gap: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 0.5s forwards, fadeOut 0.5s forwards 2.5s; /* Fade in, then fade out after 2.5s delay */
+  gap: var(--spacing-unit);
+  box-shadow: 0 2px var(--spacing-unit) rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.5s forwards, fadeOut 0.5s forwards 2.5s;
 }
 
 .toast-icon {
@@ -533,17 +566,17 @@ section h2 {
 }
 
 .toast.success {
-  background-color: #28a745;
+  background-color: var(--success-color);
 }
 .toast.error {
-  background-color: #dc3545;
+  background-color: var(--danger-color);
 }
 .toast.info {
-  background-color: #17a2b8;
+  background-color: var(--info-color);
 }
 .toast.warning {
-  background-color: #ffc107;
-  color: #333;
+  background-color: var(--warning-color);
+  color: var(--text-color);
 }
 
 @keyframes fadeIn {
@@ -568,44 +601,42 @@ section h2 {
   }
 }
 
-/* Media Queries for Responsiveness */
+/* --- Media Queries for Responsiveness --- */
 @media (max-width: 768px) {
   .main-header {
     flex-direction: column;
     text-align: center;
   }
   .main-header nav {
-    margin-top: 10px;
+    margin-top: var(--spacing-unit);
   }
   .main-header nav button {
-    margin: 5px;
+    margin: calc(var(--spacing-unit) / 2);
   }
 
   .card-form-wrapper {
-    flex-direction: column; /* Stack columns vertically on smaller screens */
+    flex-direction: column;
   }
 
   .form-left-column,
   .form-right-column {
-    min-width: unset; /* Remove min-width constraints */
+    min-width: unset;
     flex-basis: auto;
   }
 
-  /* Admin card list reverts to single column on smaller screens */
   .card-list {
-    grid-template-columns: 1fr; /* Single column */
+    grid-template-columns: 1fr;
   }
 
-  /* Play cards will naturally adjust to fewer columns due to minmax and max-width */
   .memory-cards-grid {
-    max-width: unset; /* Allow grid to use full width on small screens */
+    max-width: unset;
   }
 }
 
 @media (max-width: 480px) {
   main {
-    padding: 10px;
-    margin: 10px auto;
+    padding: var(--spacing-unit);
+    margin: var(--spacing-unit) auto;
   }
   section h2 {
     font-size: 1.5em;
@@ -616,7 +647,7 @@ section h2 {
     align-items: flex-start;
   }
   .card-info {
-    margin-bottom: 10px;
+    margin-bottom: var(--spacing-unit);
   }
   .card-actions {
     width: 100%;
@@ -625,13 +656,93 @@ section h2 {
   }
 
   .memory-cards-grid {
-    grid-template-columns: repeat(
-      auto-fill,
-      minmax(120px, 1fr)
-    ); /* Smaller cards on tiny screens */
-    gap: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: calc(var(--spacing-unit) * 1.5);
   }
   .memory-card {
     height: 150px;
   }
+}
+
+/* --- NEW: Lightbox Styles --- */
+#lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* Dark overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1001; /* Ensure it's above other content and toasts */
+}
+
+.lightbox-content {
+  position: relative;
+  background-color: white;
+  padding: 20px;
+  border-radius: var(--border-radius);
+  max-width: 90%;
+  max-height: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#lightboxImage {
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain; /* Ensure the image fits within the lightbox */
+}
+
+.close-lightbox {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  color: #333;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.close-lightbox:hover,
+.close-lightbox:focus {
+  color: #dc3545; /* Red on hover */
+}
+
+/* Style for the magnifying glass icon */
+.lightbox-icon {
+  position: absolute;
+  bottom: 5px; /* Adjust vertical position */
+  right: 5px; /* Adjust horizontal position */
+  background: rgba(
+    255,
+    255,
+    255,
+    0.8
+  ); /* Slightly transparent white background */
+  border: 1px solid #ccc;
+  border-radius: 50%; /* Make it a circle */
+  width: 30px; /* Adjust size */
+  height: 30px; /* Adjust size */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1.1em;
+  color: #333;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.lightbox-icon:hover {
+  background-color: #eee;
+  transform: scale(1.05);
+}
+
+/* Ensure the icon is not visible on the back of the card */
+.memory-card-back .lightbox-icon {
+  display: none;
 }

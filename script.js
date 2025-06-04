@@ -66,6 +66,21 @@ document.addEventListener('DOMContentLoaded', async () => {
   toastContainer.classList.add('toast-container');
   document.body.appendChild(toastContainer);
 
+  // --- Lightbox Elements (Dynamically created) ---
+  const lightbox = document.createElement('div');
+  lightbox.id = 'lightbox';
+  lightbox.classList.add('hidden'); // Initially hidden
+  lightbox.innerHTML = `
+    <div class="lightbox-content">
+      <span class="close-lightbox">&times;</span>
+      <img src="" alt="Full size image" id="lightboxImage">
+    </div>
+  `;
+  document.body.appendChild(lightbox);
+
+  const closeLightboxBtn = lightbox.querySelector('.close-lightbox');
+  const lightboxImage = lightbox.querySelector('#lightboxImage');
+
   // --- Dexie.js Database Setup ---
   const db = new Dexie('MemoryCardsDB');
   db.version(1).stores({
@@ -192,6 +207,26 @@ document.addEventListener('DOMContentLoaded', async () => {
       previewImage.classList.add('hidden');
       noImagePreview.classList.remove('hidden'); // Show the "No image URL provided" text
     }
+  }
+
+  /**
+   * Opens the lightbox with the specified image URL.
+   * @param {string} imageUrl - The URL of the image to display in the lightbox.
+   */
+  function openLightbox(imageUrl) {
+    lightboxImage.src = imageUrl;
+    lightbox.classList.remove('hidden');
+    // Optional: Add a class to body to prevent scrolling
+    document.body.style.overflow = 'hidden';
+  }
+
+  /**
+   * Closes the lightbox.
+   */
+  function closeLightbox() {
+    lightbox.classList.add('hidden');
+    lightboxImage.src = ''; // Clear image source
+    document.body.style.overflow = ''; // Restore body scrolling
   }
 
 
@@ -506,6 +541,18 @@ document.addEventListener('DOMContentLoaded', async () => {
       img.alt = 'Memory Card Image';
       cardFront.appendChild(img);
 
+      // --- NEW: Magnifying Glass Icon for Lightbox ---
+      const lightboxIcon = document.createElement('button');
+      lightboxIcon.classList.add('lightbox-icon');
+      lightboxIcon.innerHTML = '<i class="fas fa-search-plus"></i>';
+      lightboxIcon.title = 'View full size image';
+      lightboxIcon.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent card flip when clicking icon
+        openLightbox(card.imageSide);
+      });
+      cardFront.appendChild(lightboxIcon);
+
+
       // Back side of the card (Text)
       const cardBack = document.createElement('div');
       cardBack.classList.add('memory-card-back');
@@ -673,6 +720,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   // --- NEW: Export/Import Event Listeners ---
   exportDataBtn.addEventListener('click', exportData);
   importDataInput.addEventListener('change', importData);
+
+  // --- NEW: Lightbox Event Listeners ---
+  closeLightboxBtn.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) { // Close only if clicking on the overlay, not the image
+      closeLightbox();
+    }
+  });
 
 
   // --- Initial Load ---
