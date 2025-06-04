@@ -1,5 +1,3 @@
-// script/admin.js
-
 import { db } from './db.js';
 import { isValidURL, showToast, getOrientationClass, openLightbox } from './utils.js';
 

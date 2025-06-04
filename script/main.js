@@ -1,5 +1,3 @@
-// script/main.js
-
 import { openDatabase } from './db.js';
 import { renderCardList, cancelEdit } from './admin.js';
 import { renderPlayCards } from './play.js';

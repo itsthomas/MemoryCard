@@ -1,5 +1,3 @@
-// script/play.js
-
 import { db } from './db.js';
 import { showToast, getOrientationClass, openLightbox } from './utils.js';
 

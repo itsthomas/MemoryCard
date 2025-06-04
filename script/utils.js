@@ -1,5 +1,3 @@
-// script/utils.js
-
 // --- DOM Element References (for utilities that need them) ---
 const toastContainer = document.createElement('div');
 document.addEventListener('DOMContentLoaded', () => {

@@ -1,5 +1,3 @@
-// script/db.js
-
 import { showToast } from './utils.js'; // Import toast for error handling
 
 const db = new Dexie('MemoryCardsDB');
