@@ -57,7 +57,6 @@ section {
 section h2 {
   color: #343a40;
   margin-bottom: 20px;
-  margin-top: 0;
   border-bottom: 2px solid #e9ecef;
   padding-bottom: 10px;
   font-size: 1.7em;
@@ -70,7 +69,7 @@ section h2 {
 
 /* Admin Section - Card Form */
 .card-form-container {
-  background-color: #ddeaf7;
+  background-color: #e9ecef;
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 30px;
@@ -200,8 +199,9 @@ section h2 {
   text-decoration: none; /* For label acting as button */
   display: inline-block; /* For label acting as button */
 }
+
 #exportDataBtn {
-  background-color: #007bff;
+  background-color: #17a2b8;
   color: white;
 }
 
@@ -257,7 +257,7 @@ section h2 {
   color: #6c757d;
 }
 
-/* Card List Display (Admin) - NEW GRID STYLES HERE */
+/* Card List Display (Admin) */
 .card-list {
   display: grid; /* Enable CSS Grid */
   grid-template-columns: repeat(2, 1fr); /* Two columns, equal width */
@@ -383,20 +383,17 @@ section h2 {
 }
 
 .pagination-controls button.active {
-  background-color: #4caf50;
+  background-color: #0056b3;
   font-weight: bold;
 }
 
-/* Play Section - Memory Cards Grid */
+/* Play Section - Memory Cards Grid - MODIFIED FOR MAX 5 COLUMNS */
 .memory-cards-grid {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(150px, 1fr)
-  ); /* Responsive grid */
-  gap: 20px;
-  padding: 20px 0;
-  justify-content: center; /* Center cards if they don't fill the row */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  padding: 10px;
+  grid-auto-rows: minmax(100px, auto);
 }
 
 .memory-card {
@@ -470,9 +467,16 @@ section h2 {
 }
 
 .memory-card-back hr {
-  border-color: rgba(255, 255, 255, 0.5);
-  width: 80%;
-  margin: 8px 0;
+  width: 60%;
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.25),
+    rgba(0, 0, 0, 0)
+  );
+  margin: 10px 0;
 }
 
 /* Image Orientation Classes for Play Cards */
@@ -591,6 +595,11 @@ section h2 {
   .card-list {
     grid-template-columns: 1fr; /* Single column */
   }
+
+  /* Play cards will naturally adjust to fewer columns due to minmax and max-width */
+  .memory-cards-grid {
+    max-width: unset; /* Allow grid to use full width on small screens */
+  }
 }
 
 @media (max-width: 480px) {
@@ -600,6 +609,7 @@ section h2 {
   }
   section h2 {
     font-size: 1.5em;
+    margin-top: 0;
   }
   .card-item {
     flex-direction: column;
