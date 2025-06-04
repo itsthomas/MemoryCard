@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // NEW: Image Preview Elements
   const previewImage = document.getElementById('previewImage');
-  const noImagePreview = document.getElementById('noImagePreview');
+  const noImagePreview = document.getElementById('noImagePreview'); // This is the 'No image URL provided' text
 
   // --- NEW: Export/Import Controls (Dynamically added for cleaner HTML) ---
   const exportDataBtn = document.createElement('button');
@@ -186,11 +186,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (isValidURL(url)) {
       previewImage.src = url;
       previewImage.classList.remove('hidden');
-      noImagePreview.classList.add('hidden');
+      noImagePreview.classList.add('hidden'); // Hide the "No image URL provided" text
     } else {
       previewImage.src = '';
       previewImage.classList.add('hidden');
-      noImagePreview.classList.remove('hidden');
+      noImagePreview.classList.remove('hidden'); // Show the "No image URL provided" text
     }
   }
 
