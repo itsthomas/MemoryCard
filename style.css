@@ -73,6 +73,27 @@ section h3 {
   border: 1px dashed #aaffaa;
 }
 
+/* NEW: Two-column layout for form */
+.card-form-wrapper {
+  display: flex;
+  gap: 20px; /* Space between columns */
+  margin-bottom: 20px; /* Space below the wrapper */
+  flex-wrap: wrap; /* Allow columns to wrap on smaller screens */
+}
+
+.form-left-column {
+  flex: 2; /* Takes 2 parts of available space */
+  min-width: 280px; /* Minimum width before wrapping */
+}
+
+.form-right-column {
+  flex: 1; /* Takes 1 part of available space */
+  min-width: 200px; /* Minimum width before wrapping */
+  display: flex; /* Use flex to center preview content */
+  align-items: center;
+  justify-content: center;
+}
+
 .form-group {
   margin-bottom: 15px;
 }
@@ -90,6 +111,41 @@ section h3 {
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1em;
+}
+
+/* NEW: Image preview styling */
+.preview-image-container {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  background-color: #f0f0f0;
+  width: 100%; /* Take full width of its column */
+  height: 200px; /* Fixed height for consistency */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Hide overflowing parts of the image */
+}
+
+.preview-image-container p {
+  margin: 0;
+  color: #777;
+  font-style: italic;
+}
+
+#previewImage {
+  max-width: 100%;
+  max-height: 100%; /* Ensure image fits within the container */
+  object-fit: contain; /* Keep aspect ratio, fit inside */
+  border-radius: 4px;
+  margin-top: 10px; /* Space above image */
+}
+
+.preview-message {
+  font-size: 0.9em;
+  color: #888;
 }
 
 ::placeholder {
@@ -427,6 +483,11 @@ section h3 {
     padding: 8px 15px;
     font-size: 0.9em;
   }
+
+  /* Adjust form columns for smaller screens */
+  .card-form-wrapper {
+    flex-direction: column; /* Stack columns vertically */
+  }
 }
 
 @media (max-width: 480px) {
@@ -474,4 +535,90 @@ section h3 {
 
 #importDataLabel:hover {
   background-color: #e0a800;
+}
+
+/* Toast Notification Styling */
+.toast-container {
+  position: fixed;
+  bottom: 20px; /* Distance from bottom */
+  right: 20px; /* Distance from right */
+  z-index: 1000; /* Ensure it's above other content */
+  display: flex;
+  flex-direction: column-reverse; /* New toasts appear above older ones */
+  gap: 10px; /* Space between multiple toasts */
+}
+
+.toast {
+  background-color: #333;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  opacity: 0; /* Start hidden */
+  transform: translateY(20px); /* Start slightly below final position */
+  animation: fadeSlideIn 0.5s forwards, fadeOut 0.5s 2.5s forwards; /* Animation sequence */
+  min-width: 250px;
+  max-width: 350px;
+  font-size: 0.95em;
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between icon and text */
+}
+
+/* Specific styles for different toast types */
+.toast.success {
+  background-color: #28a745; /* Green */
+}
+
+.toast.error {
+  background-color: #dc3545; /* Red */
+}
+
+.toast.info {
+  background-color: #007bff; /* Blue */
+}
+
+.toast.warning {
+  background-color: #ffc107; /* Yellow */
+  color: #333; /* Dark text for yellow background */
+}
+
+.toast .toast-icon {
+  font-size: 1.3em;
+}
+
+@keyframes fadeSlideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+/* Responsive adjustment for toasts */
+@media (max-width: 600px) {
+  .toast-container {
+    bottom: 10px;
+    right: 10px;
+    left: 10px; /* Occupy full width on small screens */
+    flex-direction: column-reverse;
+    align-items: center; /* Center toasts horizontally */
+  }
+
+  .toast {
+    width: calc(100% - 20px); /* Adjust width for padding */
+    min-width: unset;
+    max-width: unset;
+    font-size: 0.9em;
+  }
 }

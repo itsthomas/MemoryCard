@@ -28,6 +28,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Pagination Controls
   const paginationControls = document.getElementById('paginationControls');
 
+  // NEW: Image Preview Elements
+  const previewImage = document.getElementById('previewImage');
+  const noImagePreview = document.getElementById('noImagePreview');
+
   // --- NEW: Export/Import Controls (Dynamically added for cleaner HTML) ---
   const exportDataBtn = document.createElement('button');
   exportDataBtn.id = 'exportDataBtn';
@@ -57,6 +61,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     adminSectionDiv.appendChild(utilityDiv);
   }
 
+  // --- NEW: Toast Container (Dynamically added) ---
+  const toastContainer = document.createElement('div');
+  toastContainer.classList.add('toast-container');
+  document.body.appendChild(toastContainer);
 
   // --- Dexie.js Database Setup ---
   const db = new Dexie('MemoryCardsDB');
@@ -72,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error('Failed to open Dexie database:', err.stack || err);
     // Potentially show an error message to the user
     // Consider disabling features if the database cannot be opened
-    alert('Error initializing the database. Your data might not be saved.');
+    showToast('Error initializing the database. Your data might not be saved.', 'error');
   }
 
   // --- Data Storage and State ---
@@ -134,6 +142,58 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
     img.src = imgUrl;
   }
+
+  /**
+   * Displays a toast notification.
+   * @param {string} message - The message to display.
+   * @param {'success' | 'error' | 'info' | 'warning'} type - The type of toast (for styling).
+   */
+  function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.classList.add('toast', type);
+
+    let iconClass = '';
+    switch (type) {
+      case 'success':
+        iconClass = 'fas fa-check-circle';
+        break;
+      case 'error':
+        iconClass = 'fas fa-times-circle';
+        break;
+      case 'warning':
+        iconClass = 'fas fa-exclamation-triangle';
+        break;
+      case 'info':
+      default:
+        iconClass = 'fas fa-info-circle';
+        break;
+    }
+
+    toast.innerHTML = `<i class="toast-icon ${iconClass}"></i><span>${message}</span>`;
+    toastContainer.appendChild(toast);
+
+    // Remove toast after a delay (e.g., 3 seconds)
+    setTimeout(() => {
+      toast.remove();
+    }, 3000); // This duration should match the CSS animation duration for fadeOut + some buffer
+  }
+
+  /**
+   * Updates the image preview in the form.
+   * @param {string} url - The URL of the image to preview.
+   */
+  function updateImagePreview(url) {
+    if (isValidURL(url)) {
+      previewImage.src = url;
+      previewImage.classList.remove('hidden');
+      noImagePreview.classList.add('hidden');
+    } else {
+      previewImage.src = '';
+      previewImage.classList.add('hidden');
+      noImagePreview.classList.remove('hidden');
+    }
+  }
+
 
   // --- Admin Section Functions ---
 
@@ -274,12 +334,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Basic input validation
     if (!imageURL || !nameOfPainting || !painter || !location) {
-      alert('Please fill in all fields.');
+      showToast('Please fill in all fields.', 'warning');
       return;
     }
 
     if (!isValidURL(imageURL)) {
-      alert('Please enter a valid image URL.');
+      showToast('Please enter a valid image URL.', 'warning');
       return;
     }
 
@@ -297,9 +357,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       try {
         await db.cards.update(currentEditCardId, cardData);
         console.log('Card updated:', currentEditCardId);
+        showToast('Card updated successfully!', 'success');
       } catch (error) {
         console.error('Error updating card:', error);
-        alert('Failed to update card. Please try again.');
+        showToast('Failed to update card. Please try again.', 'error');
         return;
       }
       saveCardBtn.textContent = 'Add Card'; // Change button text back
@@ -311,9 +372,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       try {
         await db.cards.add(cardData);
         console.log('Card added.');
+        showToast('Card added successfully!', 'success');
       } catch (error) {
         console.error('Error adding card:', error);
-        alert('Failed to add card. Please try again.');
+        showToast('Failed to add card. Please try again.', 'error');
         return;
       }
       currentPage = 1; // Reset to first page for new additions
@@ -321,6 +383,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await renderCardList(); // Re-render the list, applying any current filter
     cardForm.reset(); // Clear form fields
+    updateImagePreview(''); // Clear the preview image
   }
 
   /**
@@ -338,9 +401,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       saveCardBtn.textContent = 'Update Card'; // Change button text
       cancelEditBtn.classList.remove('hidden'); // Show cancel button
+      showToast('Editing card. Modify fields and click "Update Card".', 'info');
+      updateImagePreview(cardToEdit.imageSide); // Show preview of the image being edited
+
+      // Scroll to the top of the form
+      cardForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
     } else {
       console.error('Card not found for editing:', id);
-      alert('Card not found for editing.');
+      showToast('Card not found for editing.', 'error');
     }
   }
 
@@ -353,6 +422,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       try {
         await db.cards.delete(id);
         console.log('Card deleted:', id);
+        showToast('Card deleted successfully!', 'success');
 
         // After deletion, re-evaluate current page to prevent being on an empty page
         const totalCardsAfterDeletion = await db.cards.count();
@@ -367,8 +437,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         await renderCardList(); // Re-render the list, applying any current filter
       } catch (error) {
         console.error('Error deleting card:', error);
-        alert('Failed to delete card. Please try again.');
+        showToast('Failed to delete card. Please try again.', 'error');
       }
+    } else {
+      showToast('Card deletion cancelled.', 'info');
     }
   }
 
@@ -380,6 +452,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     currentEditCardId = null;
     saveCardBtn.textContent = 'Add Card';
     cancelEditBtn.classList.add('hidden');
+    showToast('Card editing cancelled.', 'info');
+    updateImagePreview(''); // Clear the preview image
   }
 
   // --- Play Section Functions ---
@@ -397,6 +471,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       playErrorMessage.textContent =
         'No cards added yet. Please go to the Admin section to create some!';
       playErrorMessage.classList.remove('hidden');
+      showToast('No cards to play. Add some in the Admin section!', 'warning');
       return;
     }
 
@@ -407,10 +482,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (cardsToDisplay.length === 0) {
       playErrorMessage.textContent = 'Something went wrong. No cards selected for display.';
       playErrorMessage.classList.remove('hidden');
+      showToast('Error: No cards selected for play.', 'error');
       return;
     } else if (cardsToDisplay.length < 10 && cardsToDisplay.length > 0) {
       playErrorMessage.textContent = `Displaying ${cardsToDisplay.length} cards. Add more cards in Admin to get a full set of 10.`;
       playErrorMessage.classList.remove('hidden');
+      showToast(`Displaying ${cardsToDisplay.length} cards.`, 'info');
     }
 
     cardsToDisplay.forEach((card) => {
@@ -474,10 +551,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      alert('Data exported successfully!');
+      showToast('Data exported successfully!', 'success');
     } catch (error) {
       console.error('Error exporting data:', error);
-      alert('Failed to export data. Please try again.');
+      showToast('Failed to export data. Please try again.', 'error');
     }
   }
 
@@ -488,11 +565,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function importData(event) {
     const file = event.target.files[0];
     if (!file) {
+      showToast('No file selected for import.', 'info');
       return;
     }
 
     if (!confirm('Importing data will replace all existing memory cards. Are you sure you want to continue?')) {
       event.target.value = ''; // Clear the input so the same file can be selected again
+      showToast('Data import cancelled.', 'info');
       return;
     }
 
@@ -502,7 +581,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const importedCards = JSON.parse(e.target.result);
 
         if (!Array.isArray(importedCards)) {
-          alert('Invalid JSON format. Expected an array of card objects.');
+          showToast('Invalid JSON format. Expected an array of card objects.', 'error');
           return;
         }
 
@@ -516,7 +595,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         );
 
         if (!isValidImport) {
-          alert('Invalid card data structure in the JSON file. Please ensure it matches the expected format.');
+          showToast('Invalid card data structure in the JSON file. Please ensure it matches the expected format.', 'error');
           return;
         }
 
@@ -529,13 +608,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             return rest;
         });
         await db.cards.bulkAdd(cardsWithoutIds);
-        alert('Data imported successfully!');
+        showToast('Data imported successfully!', 'success');
         currentPage = 1; // Reset to first page after import
         await renderCardList(); // Re-render the list to show imported data
         event.target.value = ''; // Clear the input
       } catch (error) {
         console.error('Error importing data:', error);
-        alert('Failed to import data. Please ensure the file is a valid JSON and formatted correctly.');
+        showToast('Failed to import data. Please ensure the file is a valid JSON and formatted correctly.', 'error');
         event.target.value = ''; // Clear the input
       }
     };
@@ -584,6 +663,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   cardSearchInput.addEventListener('input', async () => {
     currentPage = 1; // Reset to first page on new search
     await renderCardList();
+  });
+
+  // NEW: Image URL input listener for preview
+  imageURLInput.addEventListener('input', (event) => {
+    updateImagePreview(event.target.value);
   });
 
   // --- NEW: Export/Import Event Listeners ---
