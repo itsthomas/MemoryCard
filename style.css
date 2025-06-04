@@ -449,10 +449,10 @@ section h2 {
 }
 
 .memory-card-back {
-  background-color: #007bff;
+  background-color: #e98926;
   color: white;
   transform: rotateY(180deg);
-  border: 1px solid #0056b3;
+  border: 1px solid #b76007;
 }
 
 .memory-card-back p {
