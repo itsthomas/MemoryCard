@@ -1,4 +1,4 @@
-# Why I'm using `IndexedDB` (with Dexie.js) instead of just `localStorage` 
+# Why using `IndexedDB` (with Dexie.js) instead of just `localStorage` 
 
 There are several compelling reasons to use Dexie.js (and by extension, IndexedDB) over `localStorage` for an application like this Memory Card Game:
 
