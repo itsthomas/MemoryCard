@@ -344,7 +344,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         lightboxImage.style.maxWidth = '60%';
         console.log('Lightbox image is portrait, set max-width to 60%.');
       } else {
-        lightboxImage.style.maxWidth = '80%'; // Reset for landscape/square
+        lightboxImage.style.maxWidth = ''; // Reset for landscape/square
         console.log('Lightbox image is landscape or square, max-width reset.');
       }
       // Remove this specific onload handler after it fires, it's a one-time event per image load

@@ -643,8 +643,6 @@ section h2 {
 }
 
 #lightboxImage {
-  /* max-width: 80%;
-  max-height: 80%; */
   object-fit: contain; /* Ensure the image fits within the lightbox */
   min-height: 300px; /* Added min-height for lightbox image */
 }
