@@ -637,11 +637,14 @@ section h2 {
   display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
+  border: 20px solid white;
+  overflow: hidden;
 }
 
 #lightboxImage {
-  max-width: 80%;
-  max-height: 80%;
+  /* max-width: 80%;
+  max-height: 80%; */
   object-fit: contain; /* Ensure the image fits within the lightbox */
   min-height: 300px; /* Added min-height for lightbox image */
 }
