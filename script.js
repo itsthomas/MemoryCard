@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (lightboxImage.naturalHeight > lightboxImage.naturalWidth) {
         lightboxImage.style.maxWidth = '60%';
       } else {
-        lightboxImage.style.maxWidth = '80%';
+        lightboxImage.style.maxWidth = '90%';
       }
       // Remove this specific onload handler after it fires, it's a one-time event per image load
       lightboxImage.removeEventListener('load', currentLightboxOnLoadHandler);
