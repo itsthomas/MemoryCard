@@ -1505,5 +1505,95 @@
       "location": "Gallery of 19th-century Realism, Paris, France"
     },
     "id": 332
+  },
+  {
+    "imageSide": "https://images2.imgbox.com/f6/c5/beGI1bib_o.png",
+    "imageThumbnail": null,
+    "textSide": {
+      "name": "At the Races in the Countryside",
+      "painter": "Edgar Degas (1869)",
+      "location": "Museum of Fine Arts, Boston, USA"
+    },
+    "id": 333
+  },
+  {
+    "imageSide": "https://images2.imgbox.com/fe/20/1QOaPT1i_o.png",
+    "imageThumbnail": null,
+    "textSide": {
+      "name": "A Young Tiger Playing with its Mother",
+      "painter": "Eugene Delarcroix (1830)",
+      "location": "Louvre Museum, Paris, France"
+    },
+    "id": 334
+  },
+  {
+    "imageSide": "https://images2.imgbox.com/4c/89/Uh1eYPhM_o.png",
+    "imageThumbnail": null,
+    "textSide": {
+      "name": "The Bathers at Asnieres",
+      "painter": "Georges Seurat",
+      "location": "The National Gallery, London, UK"
+    },
+    "id": 335
+  },
+  {
+    "imageSide": "https://images2.imgbox.com/55/fe/m8VeynZJ_o.jpg",
+    "imageThumbnail": null,
+    "textSide": {
+      "name": "The Desperate Man",
+      "painter": "Gustave Courbet (c 1843)",
+      "location": "priva"
+    },
+    "id": 336
+  },
+  {
+    "imageSide": "https://images2.imgbox.com/5f/79/GglpBX6g_o.jpg",
+    "imageThumbnail": null,
+    "textSide": {
+      "name": "The Painters Studio",
+      "painter": "Gustave Courbet",
+      "location": "Musée d'Orsay, Paris, France"
+    },
+    "id": 337
+  },
+  {
+    "imageSide": "https://images2.imgbox.com/7e/eb/aXO0HjoR_o.png",
+    "imageThumbnail": null,
+    "textSide": {
+      "name": "Surprised",
+      "painter": "Henri Rousseau",
+      "location": "National Gallery, London, UK"
+    },
+    "id": 338
+  },
+  {
+    "imageSide": "https://images2.imgbox.com/fa/15/8IrA6Z5E_o.png",
+    "imageThumbnail": null,
+    "textSide": {
+      "name": "The Dream",
+      "painter": "Henri Rousseau (1910)",
+      "location": "Museum of Modern Art (MoMA), New York, USA"
+    },
+    "id": 339
+  },
+  {
+    "imageSide": "https://images2.imgbox.com/ff/3b/MdbUP4Ax_o.png",
+    "imageThumbnail": null,
+    "textSide": {
+      "name": "Tiger and Cubs",
+      "painter": "Jean-Leon Gerome (1884)",
+      "location": "Private collection"
+    },
+    "id": 340
+  },
+  {
+    "imageSide": "https://images2.imgbox.com/7c/b6/euWWCP1L_o.png",
+    "imageThumbnail": null,
+    "textSide": {
+      "name": "Waiting",
+      "painter": "Jules-Adolphe Breton (1873)",
+      "location": "Detroit Institute of Arts, USA"
+    },
+    "id": 341
   }
 ]
