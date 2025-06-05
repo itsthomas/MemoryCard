@@ -41,7 +41,7 @@ This application is built using standard web technologies with a focus on client
 
 This application **does not provide image hosting**. It relies on **external image URLs**.
 
-Users are expected to provide valid URLs to images that are already hosted online. This means you can use any image hosting service you prefer (e.g., Imgur, Cloudinary, your own web server, or even direct links from public domain image repositories like Wikimedia Commons), as long as the URLs are publicly accessible.
+Users are expected to provide valid URLs to images that are already hosted online. This means you can use any image hosting service you prefer (e.g. imgbox.com, Imgur, Cloudinary, your own web server, or even direct links from public domain image repositories like Wikimedia Commons), as long as the URLs are publicly accessible.
 
 ## How to Use
 
