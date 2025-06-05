@@ -339,7 +339,7 @@ section h2 {
 
 .card-actions {
   display: flex;
-  gap: var(--spacing-unit);
+  gap: 0;
   margin-left: calc(var(--spacing-unit) * 1.5);
 }
 
@@ -350,7 +350,7 @@ section h2 {
   padding: calc(var(--spacing-unit) * 0.8) calc(var(--spacing-unit) * 1.2);
   border-radius: var(--border-radius) / 2;
   cursor: pointer;
-  font-size: 0.9em;
+  font-size: 1.2em;
   transition: background-color 0.3s ease;
 }
 
@@ -359,19 +359,21 @@ section h2 {
 }
 
 .card-actions .edit-btn {
-  background-color: var(--warning-color);
-  color: var(--text-color); /* Dark text for warning button */
+  background-color: transparent;
+  color: var(--text-color);
 }
 .card-actions .edit-btn:hover {
   background-color: #e0a800; /* Darker shade of warning color */
+  color: white;
 }
 
 .card-actions .delete-btn {
-  background-color: var(--danger-color);
-  color: white;
+  background-color: transparent;
+  color: var(--text-color);
 }
 .card-actions .delete-btn:hover {
   background-color: #c82333; /* Darker shade of danger color */
+  color: white;
 }
 
 #noCardsMessage {
