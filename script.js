@@ -87,8 +87,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // --- Dexie.js Database Setup ---
   const db = new Dexie('MemoryCardsDB');
   db.version(1).stores({
-    // ADDED 'imageThumbnail' to the store schema
-    cards: '++id, imageSide, imageThumbnail, textSide.name, textSide.painter, textSide.location',
+    cards: '++id, imageSide, textSide.name, textSide.painter, textSide.location',
   });
 
   // Open the database (this is asynchronous)
@@ -104,8 +103,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // --- Data Storage and State ---
   let currentEditCardId = null; // To keep track of the card being edited
-  const recentlyDisplayedCardIds = []; // New: To store IDs of recently displayed cards
-  const RECENTLY_DISPLAYED_LIMIT = 5; // New: Number of unique cards to remember (adjust as needed)
 
   // Pagination State
   const cardsPerPage = 10;
@@ -114,10 +111,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   // New: Variable to hold the debounce timer for search input
   let searchTimeout = null;
   const DEBOUNCE_DELAY = 1000; // milliseconds
-
-  // --- Proxy Server Configuration (if applicable) ---
-  // IMPORTANT: Change this to your actual proxy server URL if you're using one!
-  const PROXY_SERVER_URL = 'http://localhost:3001'; // Default, change if your proxy is elsewhere
 
   // --- Utility Functions ---
 
@@ -144,96 +137,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       return false;
     }
   }
-
-  /**
-   * NEW/MODIFIED: Generates a thumbnail from an image URL using a canvas OR proxy.
-   * @param {string} imageUrl - The URL of the original image.
-   * @param {number} maxWidth - The maximum width for the thumbnail.
-   * @param {number} maxHeight - The maximum height for the thumbnail.
-   * @returns {Promise<string|null>} - A promise that resolves with the data URL of the thumbnail, or null on error.
-   */
-  async function generateThumbnail(imageUrl, maxWidth = 150, maxHeight = 150) {
-    // Attempt to use the proxy server if defined
-    if (typeof PROXY_SERVER_URL !== 'undefined' && PROXY_SERVER_URL) {
-      try {
-        const proxyEndpoint = `${PROXY_SERVER_URL}/proxy-thumbnail?imageUrl=${encodeURIComponent(imageUrl)}&width=${maxWidth}&height=${maxHeight}`;
-        console.log(`[Frontend] Requesting thumbnail from proxy: ${proxyEndpoint}`);
-        const response = await fetch(proxyEndpoint);
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error(`[Frontend] Proxy server responded with error: ${response.status} ${response.statusText}`, errorText);
-          showToast(`Failed to get thumbnail from proxy: ${response.statusText}. Check server logs.`, 'error');
-          return null;
-        }
-
-        const blob = await response.blob();
-        return new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.onerror = () => {
-            console.error('[Frontend] FileReader error converting blob to data URL');
-            resolve(null);
-          };
-          reader.readAsDataURL(blob);
-        });
-
-      } catch (error) {
-        console.error('[Frontend] Network or unexpected error calling proxy server:', error);
-        showToast('Could not connect to thumbnail proxy server. Is it running?', 'error');
-        // Fallback to client-side generation if proxy fails completely
-        return clientSideGenerateThumbnail(imageUrl, maxWidth, maxHeight);
-      }
-    } else {
-      // If no proxy URL is defined, fall back to client-side generation
-      return clientSideGenerateThumbnail(imageUrl, maxWidth, maxHeight);
-    }
-  }
-
-  /**
-   * Client-side thumbnail generation fallback (used if no proxy or proxy fails).
-   * @param {string} imageUrl - The URL of the original image.
-   * @param {number} maxWidth - The maximum width for the thumbnail.
-   * @param {number} maxHeight - The maximum height for the thumbnail.
-   * @returns {Promise<string|null>} - A promise that resolves with the data URL of the thumbnail, or null on error.
-   */
-  async function clientSideGenerateThumbnail(imageUrl, maxWidth = 150, maxHeight = 150) {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous'; // Important for loading images from different origins onto canvas without tainting
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        let width = img.width;
-        let height = img.height;
-
-        if (width > maxWidth || height > maxHeight) {
-          const aspectRatio = width / height;
-          if (width > height) {
-            width = maxWidth;
-            height = width / aspectRatio;
-          } else {
-            height = maxHeight;
-            width = height * aspectRatio;
-          }
-        }
-
-        canvas.width = width;
-        canvas.height = height;
-
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, width, height);
-
-        resolve(canvas.toDataURL('image/jpeg', 0.7)); // 0.7 is quality (0.0 to 1.0)
-      };
-      img.onerror = () => {
-        console.error('Failed to load image for client-side thumbnail generation (CORS or invalid URL):', imageUrl);
-        showToast('Failed to generate client-side thumbnail due to CORS or bad URL.', 'warning');
-        resolve(null); // Resolve with null on error
-      };
-      img.src = imageUrl;
-    });
-  }
-
 
   /**
    * Determines the orientation of an image (portrait, landscape, or square)
@@ -298,7 +201,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   /**
-   * Updates the image preview in the form. (UNMODIFIED from original code for preview)
+   * Updates the image preview in the form.
    * @param {string} url - The URL of the image to preview.
    */
   function updateImagePreview(url) {
@@ -313,7 +216,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  // --- Lightbox Event Handler Management ---
   // Variables to store current event handlers, allowing them to be removed later
   let currentLightboxOnLoadHandler = null;
   let currentLightboxOnErrorHandler = null;
@@ -327,6 +229,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     lightboxImage.style.maxWidth = '';
 
     // 2. Remove any previously attached handlers to prevent accumulation
+    // This is crucial to prevent the "Failed to load" errors after closing.
     if (currentLightboxOnLoadHandler) {
       lightboxImage.removeEventListener('load', currentLightboxOnLoadHandler);
     }
@@ -342,10 +245,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Determine orientation and apply style
       if (lightboxImage.naturalHeight > lightboxImage.naturalWidth) {
         lightboxImage.style.maxWidth = '60%';
-        console.log('Lightbox image is portrait, set max-width to 60%.');
       } else {
-        lightboxImage.style.maxWidth = '80%'; // Reset for landscape/square
-        console.log('Lightbox image is landscape or square, max-width reset.');
+        lightboxImage.style.maxWidth = '80%';
       }
       // Remove this specific onload handler after it fires, it's a one-time event per image load
       lightboxImage.removeEventListener('load', currentLightboxOnLoadHandler);
@@ -354,9 +255,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     currentLightboxOnErrorHandler = () => {
       console.error('Failed to load image in lightbox:', imageUrl);
-      showToast('Failed to load full size image.', 'error');
+      showToast('Failed to load full size image. Please check the URL.', 'error');
       // If image fails, close the lightbox and prevent further errors from this handler
-      closeLightbox();
+      closeLightbox(); // This will also remove its own handler
 
       // Remove this specific onerror handler after it fires
       lightboxImage.removeEventListener('error', currentLightboxOnErrorHandler);
@@ -379,7 +280,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   function closeLightbox() {
     lightbox.classList.add('hidden');
 
-    // IMPORTANT FIX: Remove event listeners *before* clearing the src.
+    // IMPORTANT: Remove event listeners *before* clearing the src.
     // Clearing src triggers onerror if listeners are still attached.
     if (currentLightboxOnLoadHandler) {
       lightboxImage.removeEventListener('load', currentLightboxOnLoadHandler);
@@ -399,7 +300,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   /**
    * Renders the list of all memory cards in the admin section,
-   * applying search filters and pagination. (UNMODIFIED - still uses full image for admin list)
+   * applying search filters and pagination.
    */
   async function renderCardList() {
     // Clear existing list items
@@ -449,7 +350,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       cardItem.classList.add('card-item');
       cardItem.setAttribute('data-id', card.id); // 'id' will now be numerical
 
-      // STILL USES FULL IMAGE for admin list view as per original code
       cardItem.innerHTML = `
             <div class="card-info">
                 <img src="${card.imageSide}" alt="${card.textSide.name}">
@@ -523,7 +423,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   /**
    * Handles the form submission for adding or updating a memory card.
-   * (MODIFIED to generate and store thumbnail)
    * @param {Event} event - The form submit event.
    */
   async function addOrUpdateCard(event) {
@@ -545,16 +444,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
-    // NEW: Generate thumbnail for storage
-    const imageThumbnail = await generateThumbnail(imageURL, 150, 150); // Small thumbnail for storage
-    if (imageThumbnail === null) {
-      // If thumbnail generation fails (e.g., CORS, bad URL, proxy issue), imageThumbnail will be null
-      showToast('Failed to generate image thumbnail. Storing full image only.', 'warning');
-    }
-
     const cardData = {
       imageSide: imageURL,
-      imageThumbnail: imageThumbnail, // Store the generated thumbnail (will be null if failed)
       textSide: {
         name: nameOfPainting,
         painter: painter,
@@ -669,9 +560,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // --- Play Section Functions ---
 
   /**
-   * Renders a maximum of 10 random memory cards in the play section,
-   * with improved variety by avoiding recently displayed cards.
-   * (MODIFIED to use thumbnails)
+   * Renders a maximum of 10 random memory cards in the play section.
    */
   async function renderPlayCards() {
     memoryCardsGrid.innerHTML = ''; // Clear existing cards
@@ -687,33 +576,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
-    // Filter out recently displayed cards if enough cards exist
-    let availableCards = allCardsInDB.filter(
-      (card) => !recentlyDisplayedCardIds.includes(card.id)
-    );
-
-    // If most cards have been recently displayed, or not enough unique cards,
-    // temporarily loosen the restriction. This ensures cards are always displayed.
-    if (availableCards.length < 10 && allCardsInDB.length >= 10) {
-      // If we don't have 10 unique cards available, but we have 10 total cards,
-      // reset recentlyDisplayedCardIds to ensure we can pick 10 different ones.
-      // This is a trade-off for variety over strict recent exclusion.
-      recentlyDisplayedCardIds.length = 0; // Clear the array
-      availableCards = [...allCardsInDB]; // Use all cards again
-    } else if (availableCards.length < 10 && allCardsInDB.length < 10) {
-      // If there are fewer than 10 total cards, just use all of them.
-      // The "recently displayed" logic is less critical here.
-      availableCards = [...allCardsInDB];
-    }
-
-
-    // Shuffle the available cards
-    const shuffledAvailableCards = [...availableCards].sort(
-      () => 0.5 - Math.random()
-    );
-
-    // Select up to 10 cards to display
-    const cardsToDisplay = shuffledAvailableCards.slice(0, 10);
+    // Shuffle cards and take up to 10
+    const shuffledCards = [...allCardsInDB].sort(() => 0.5 - Math.random());
+    const cardsToDisplay = shuffledCards.slice(0, 10);
 
     if (cardsToDisplay.length === 0) {
       playErrorMessage.textContent = 'Something went wrong. No cards selected for display.';
@@ -724,15 +589,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       playErrorMessage.textContent = `Displaying ${cardsToDisplay.length} cards. Add more cards in Admin to get a full set of 10.`;
       playErrorMessage.classList.remove('hidden');
       showToast(`Displaying ${cardsToDisplay.length} cards.`, 'info');
-    }
-
-    // Update recently displayed cards list
-    // Add new cards to the front, remove old ones from the back
-    recentlyDisplayedCardIds.unshift(
-      ...cardsToDisplay.map((card) => card.id)
-    );
-    while (recentlyDisplayedCardIds.length > RECENTLY_DISPLAYED_LIMIT) {
-      recentlyDisplayedCardIds.pop();
     }
 
     cardsToDisplay.forEach((card) => {
@@ -747,20 +603,18 @@ document.addEventListener('DOMContentLoaded', async () => {
       const cardFront = document.createElement('div');
       cardFront.classList.add('memory-card-front');
       const img = document.createElement('img');
-      // NEW: Use the thumbnail for the card front in the play section
-      // Fallback to full image if thumbnail is not available (e.g., failed generation or old data)
-      img.src = card.imageThumbnail || card.imageSide;
+      img.src = card.imageSide;
       img.alt = 'Memory Card Image';
       cardFront.appendChild(img);
 
-      // Magnifying Glass Icon for Lightbox --- (UNMODIFIED - always uses full image)
+      // Magnifying Glass Icon for Lightbox ---
       const lightboxIcon = document.createElement('button');
       lightboxIcon.classList.add('lightbox-icon');
       lightboxIcon.innerHTML = '<i class="fas fa-search-plus"></i>';
       lightboxIcon.title = 'View full size image';
       lightboxIcon.addEventListener('click', (e) => {
         e.stopPropagation(); // Prevent card flip when clicking icon
-        openLightbox(card.imageSide); // Open the *full* image in the lightbox
+        openLightbox(card.imageSide);
       });
       cardFront.appendChild(lightboxIcon);
 
@@ -778,7 +632,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       cardInner.appendChild(cardBack);
       cardElement.appendChild(cardInner);
 
-      // Determine image orientation and add class for CSS sizing (UNMODIFIED - still uses full image)
+      // Determine image orientation and add class for CSS sizing
       getOrientationClass(card.imageSide, (orientationClass) => {
         cardElement.classList.add(orientationClass);
       });
@@ -796,7 +650,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   /**
    * Exports all data from the Dexie.js database to a JSON file.
-   * (MODIFIED to include imageThumbnail in export)
    */
   async function exportData() {
     try {
@@ -821,7 +674,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   /**
    * Imports data from a selected JSON file into the Dexie.js database.
    * Warns the user about overwriting existing data.
-   * (MODIFIED to generate thumbnails for imported cards if missing)
    */
   async function importData(event) {
     const file = event.target.files[0];
@@ -853,7 +705,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           typeof card.textSide.name === 'string' &&
           typeof card.textSide.painter === 'string' &&
           typeof card.textSide.location === 'string'
-          // imageThumbnail is optional on import, will be generated if missing
         );
 
         if (!isValidImport) {
@@ -863,23 +714,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Clear existing data and then bulk add new data
         await db.cards.clear(); // Clear all existing cards
-
-        // NEW: For imported cards that might not have a thumbnail, generate it
-        const cardsToStore = await Promise.all(importedCards.map(async card => {
-          const { id, ...rest } = card; // Destructure to exclude id to let Dexie assign new IDs
-          if (!rest.imageThumbnail && rest.imageSide) { // If thumbnail is missing but imageSide exists
-            const generatedThumb = await generateThumbnail(rest.imageSide);
-            if (generatedThumb) {
-              rest.imageThumbnail = generatedThumb;
-            } else {
-              console.warn(`Could not generate thumbnail for imported card: "${rest.textSide.name}". Using original image URL only.`);
-              rest.imageThumbnail = null; // Ensure it's explicitly null if generation fails
-            }
-          }
-          return rest;
-        }));
-
-        await db.cards.bulkAdd(cardsToStore);
+        // Remove 'id' property from imported cards if they have them,
+        // to let Dexie assign new auto-incremented IDs during bulkAdd
+        const cardsWithoutIds = importedCards.map(card => {
+            const { id, ...rest } = card; // Destructure to exclude id
+            return rest;
+        });
+        await db.cards.bulkAdd(cardsWithoutIds);
         showToast('Data imported successfully!', 'success');
         currentPage = 1; // Reset to first page after import
         await renderCardList(); // Re-render the list to show imported data

@@ -1485,5 +1485,25 @@
       "location": "Museo del Prado, Madrid, Spain"
     },
     "id": 330
+  },
+  {
+    "imageSide": "https://images2.imgbox.com/00/69/CeSpBLC2_o.jpg",
+    "imageThumbnail": null,
+    "textSide": {
+      "name": "The Desperate Man",
+      "painter": "Gustave Courbet (c 1843)",
+      "location": "Private collection"
+    },
+    "id": 331
+  },
+  {
+    "imageSide": "https://images2.imgbox.com/12/d8/KEr06yZe_o.jpg",
+    "imageThumbnail": null,
+    "textSide": {
+      "name": "The Painters Studio",
+      "painter": "Gustave Courbet",
+      "location": "Gallery of 19th-century Realism, Paris, France"
+    },
+    "id": 332
   }
 ]
