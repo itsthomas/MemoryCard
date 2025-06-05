@@ -1,0 +1,14 @@
+# Ignore operating system files
+.DS_Store
+Thumbs.db
+
+# Ignore build artifacts or temporary files
+*.log
+*.tmp
+*.bak
+
+# Ignore node_modules if you later add npm dependencies
+node_modules/
+
+# Ignore environment variables if you add a backend
+.env
