@@ -265,29 +265,43 @@ section h2 {
   color: var(--secondary-color);
 }
 
-.search-container {
+/* .search-container {
   position: relative;
+  margin-bottom: calc(var(--spacing-unit) * 2);
+} */
+
+.search-input-container {
+  position: relative;
+  /* width: 100%; Or desired width */
   margin-bottom: calc(var(--spacing-unit) * 2);
 }
 
 #cardSearchInput {
   width: 100%;
-  padding: var(--spacing-unit) 40px var(--spacing-unit)
-    calc(var(--spacing-unit) * 1.5);
+  padding: var(--spacing-unit) 50px var(--spacing-unit);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius) / 2;
   box-sizing: border-box;
   font-size: 1em;
 }
 
-.search-icon {
+#cardSearchInput {
+  width: 100%;
+  padding-right: 35px; /* Make space for the icon */
+}
+
+.search-icon,
+.clear-search-icon {
   position: absolute;
-  right: calc(var(--spacing-unit) * 1.5);
+  left: calc(var(--spacing-unit) * 1.5);
   top: 50%;
   transform: translateY(-50%);
   color: var(--secondary-color);
-  /* Added for accessibility: ensures icon is not focusable if it's purely decorative */
-  pointer-events: none;
+  cursor: pointer;
+}
+
+.clear-search-icon.hidden {
+  display: none;
 }
 
 /* Card List Display (Admin) */
@@ -339,7 +353,7 @@ section h2 {
 
 .card-actions {
   display: flex;
-  gap: 0;
+  /* gap: var(--spacing-unit); */
   margin-left: calc(var(--spacing-unit) * 1.5);
 }
 
@@ -360,7 +374,7 @@ section h2 {
 
 .card-actions .edit-btn {
   background-color: transparent;
-  color: var(--text-color);
+  color: var(--text-color); /* Dark text for warning button */
 }
 .card-actions .edit-btn:hover {
   background-color: #e0a800; /* Darker shade of warning color */
@@ -369,7 +383,7 @@ section h2 {
 
 .card-actions .delete-btn {
   background-color: transparent;
-  color: var(--text-color);
+  color: var(--text-color); /* Dark text for warning button */
 }
 .card-actions .delete-btn:hover {
   background-color: #c82333; /* Darker shade of danger color */
@@ -539,7 +553,7 @@ section h2 {
 /* --- Toast Notifications --- */
 .toast-container {
   position: fixed;
-  top: calc(var(--spacing-unit) * 2);
+  top: 100px;
   right: calc(var(--spacing-unit) * 2);
   z-index: 1000;
   display: flex;
@@ -599,7 +613,7 @@ section h2 {
   }
 }
 
-/* --- NEW: Lightbox Styles --- */
+/* Lightbox Styles --- */
 #lightbox {
   position: fixed;
   top: 0;

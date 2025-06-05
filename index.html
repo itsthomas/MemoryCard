@@ -59,7 +59,7 @@
                     class="hidden"
                   />
                   <p id="noImagePreview" class="preview-message">
-                    Image preview
+                    No image URL provided
                   </p>
                 </div>
               </div>
@@ -76,13 +76,18 @@
           <span id="totalCardsCount">Total cards: 0</span>
         </div>
 
-        <div class="search-container">
+        <div class="search-input-container">
           <input
             type="text"
             id="cardSearchInput"
-            placeholder="Search by painting name, painter or location..."
+            placeholder="Search cards..."
           />
-          <i class="fas fa-search search-icon"></i>
+          <span class="search-icon" id="searchIcon"
+            ><i class="fas fa-search"></i
+          ></span>
+          <span class="clear-search-icon hidden" id="clearSearchIcon"
+            ><i class="fas fa-times-circle"></i
+          ></span>
         </div>
         <div id="cardList" class="card-list">
           <p id="noCardsMessage" class="hidden">
@@ -102,11 +107,6 @@
     </main>
 
     <script src="https://unpkg.com/dexie@3.2.0/dist/dexie.min.js"></script>
-
-    <script type="module" src="script/utils.js"></script>
-    <script type="module" src="script/db.js"></script>
-    <script type="module" src="script/admin.js"></script>
-    <script type="module" src="script/play.js"></script>
-    <script type="module" src="script/main.js"></script>
+    <script src="script.js"></script>
   </body>
 </html>

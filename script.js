@@ -24,15 +24,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Search Input Reference
   const cardSearchInput = document.getElementById('cardSearchInput');
+  // New: References for search and clear icons
+  const searchIcon = document.getElementById('searchIcon');
+  const clearSearchIcon = document.getElementById('clearSearchIcon');
 
   // Pagination Controls
   const paginationControls = document.getElementById('paginationControls');
 
-  // NEW: Image Preview Elements
+  // Image Preview Elements
   const previewImage = document.getElementById('previewImage');
   const noImagePreview = document.getElementById('noImagePreview'); // This is the 'No image URL provided' text
 
-  // --- NEW: Export/Import Controls (Dynamically added for cleaner HTML) ---
+  // Export/Import Controls (Dynamically added for cleaner HTML) ---
   const exportDataBtn = document.createElement('button');
   exportDataBtn.id = 'exportDataBtn';
   exportDataBtn.textContent = 'Export Data';
@@ -61,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     adminSectionDiv.appendChild(utilityDiv);
   }
 
-  // --- NEW: Toast Container (Dynamically added) ---
+  // Toast Container (Dynamically added) ---
   const toastContainer = document.createElement('div');
   toastContainer.classList.add('toast-container');
   document.body.appendChild(toastContainer);
@@ -104,6 +107,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Pagination State
   const cardsPerPage = 10;
   let currentPage = 1;
+
+  // New: Variable to hold the debounce timer for search input
+  let searchTimeout = null;
+  const DEBOUNCE_DELAY = 1000; // milliseconds
 
   // --- Utility Functions ---
 
@@ -541,7 +548,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       img.alt = 'Memory Card Image';
       cardFront.appendChild(img);
 
-      // --- NEW: Magnifying Glass Icon for Lightbox ---
+      // Magnifying Glass Icon for Lightbox ---
       const lightboxIcon = document.createElement('button');
       lightboxIcon.classList.add('lightbox-icon');
       lightboxIcon.innerHTML = '<i class="fas fa-search-plus"></i>';
@@ -580,7 +587,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  // --- NEW: Export/Import Functions ---
+  // Export/Import Functions ---
 
   /**
    * Exports all data from the Dexie.js database to a JSON file.
@@ -678,6 +685,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     currentPage = 1; // Reset to first page when entering admin
     await renderCardList(); // Ensure data is loaded
     cancelEdit(); // Reset form when entering admin section
+    // Ensure search icon is visible and clear icon is hidden when navigating to admin
+    searchIcon.classList.remove('hidden');
+    clearSearchIcon.classList.add('hidden');
   });
 
   playBtn.addEventListener('click', async () => {
@@ -706,22 +716,55 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // Search input event listener
-  cardSearchInput.addEventListener('input', async () => {
-    currentPage = 1; // Reset to first page on new search
-    await renderCardList();
+  // Search input event listener with debouncing
+  cardSearchInput.addEventListener('input', () => {
+    // New: Clear the previous timeout if the user types again quickly
+    if (searchTimeout) {
+      clearTimeout(searchTimeout);
+    }
+
+    // Toggle icon visibility immediately (no need to debounce this part)
+    if (cardSearchInput.value.trim().length > 0) {
+      searchIcon.classList.add('hidden');
+      clearSearchIcon.classList.remove('hidden');
+    } else {
+      searchIcon.classList.remove('hidden');
+      clearSearchIcon.classList.add('hidden');
+    }
+
+    // New: Set a new timeout to call renderCardList after a delay
+    searchTimeout = setTimeout(async () => {
+      currentPage = 1; // Reset to first page on new search
+      await renderCardList();
+    }, DEBOUNCE_DELAY); // Wait for DEBOUNCE_DELAY milliseconds after typing stops
   });
 
-  // NEW: Image URL input listener for preview
+
+  // Event listener for the clear search icon
+  clearSearchIcon.addEventListener('click', async () => {
+    // New: Clear any pending search timeout when clearing manually
+    if (searchTimeout) {
+      clearTimeout(searchTimeout);
+    }
+
+    cardSearchInput.value = ''; // Clear the input
+    searchIcon.classList.remove('hidden'); // Show search icon
+    clearSearchIcon.classList.add('hidden'); // Hide clear icon
+    currentPage = 1; // Reset to first page after clearing search
+    await renderCardList(); // Re-render the list with all cards
+  });
+
+
+  // Image URL input listener for preview
   imageURLInput.addEventListener('input', (event) => {
     updateImagePreview(event.target.value);
   });
 
-  // --- NEW: Export/Import Event Listeners ---
+  // Export/Import Event Listeners ---
   exportDataBtn.addEventListener('click', exportData);
   importDataInput.addEventListener('change', importData);
 
-  // --- NEW: Lightbox Event Listeners ---
+  // Lightbox Event Listeners ---
   closeLightboxBtn.addEventListener('click', closeLightbox);
   lightbox.addEventListener('click', (e) => {
     if (e.target === lightbox) { // Close only if clicking on the overlay, not the image
