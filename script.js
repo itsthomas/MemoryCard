@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     currentLightboxOnLoadHandler = () => {
       // Determine orientation and apply style
       if (lightboxImage.naturalHeight > lightboxImage.naturalWidth) {
-        lightboxImage.style.maxWidth = '60%';
+        lightboxImage.style.maxWidth = '50%';
       } else {
         lightboxImage.style.maxWidth = '90%';
       }
