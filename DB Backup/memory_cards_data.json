@@ -6,7 +6,6 @@
       "painter": "Wilhelm Kuhnert",
       "location": "Private collection"
     },
-    "imageThumbnail": null,
     "id": 166
   },
   {
@@ -25,7 +24,6 @@
       "painter": "Vincent van Gogh (1889)",
       "location": "The National Gallery, London, UK"
     },
-    "imageThumbnail": null,
     "id": 168
   },
   {
@@ -347,7 +345,7 @@
     "imageSide": "https://images2.imgbox.com/8e/e3/BFL7g5NZ_o.png",
     "textSide": {
       "name": "Hylas und die Nymphen",
-      "painter": "John William Waterhouse",
+      "painter": "John William Waterhouse (1896)",
       "location": "Manchester Art Gallery, Manchester, UK"
     },
     "id": 204
@@ -621,15 +619,6 @@
       "location": "Private collection"
     },
     "id": 234
-  },
-  {
-    "imageSide": "https://images2.imgbox.com/1a/c0/nDla3Ozf_o.jpg",
-    "textSide": {
-      "name": "Resting Nude",
-      "painter": "Amadeo Modigiliani",
-      "location": "Museum of Modern Art (MoMA), New York City, USA"
-    },
-    "id": 235
   },
   {
     "imageSide": "https://images2.imgbox.com/93/f1/RS8ukWsg_o.png",
@@ -1488,7 +1477,7 @@
   },
   {
     "imageSide": "https://images2.imgbox.com/00/69/CeSpBLC2_o.jpg",
-    "imageThumbnail": null,
+
     "textSide": {
       "name": "The Desperate Man",
       "painter": "Gustave Courbet (c 1843)",
@@ -1498,7 +1487,6 @@
   },
   {
     "imageSide": "https://images2.imgbox.com/12/d8/KEr06yZe_o.jpg",
-    "imageThumbnail": null,
     "textSide": {
       "name": "The Painters Studio",
       "painter": "Gustave Courbet",
@@ -1508,7 +1496,6 @@
   },
   {
     "imageSide": "https://images2.imgbox.com/f6/c5/beGI1bib_o.png",
-    "imageThumbnail": null,
     "textSide": {
       "name": "At the Races in the Countryside",
       "painter": "Edgar Degas (1869)",
@@ -1518,7 +1505,6 @@
   },
   {
     "imageSide": "https://images2.imgbox.com/fe/20/1QOaPT1i_o.png",
-    "imageThumbnail": null,
     "textSide": {
       "name": "A Young Tiger Playing with its Mother",
       "painter": "Eugene Delarcroix (1830)",
@@ -1528,7 +1514,6 @@
   },
   {
     "imageSide": "https://images2.imgbox.com/4c/89/Uh1eYPhM_o.png",
-    "imageThumbnail": null,
     "textSide": {
       "name": "The Bathers at Asnieres",
       "painter": "Georges Seurat",
@@ -1538,7 +1523,6 @@
   },
   {
     "imageSide": "https://images2.imgbox.com/55/fe/m8VeynZJ_o.jpg",
-    "imageThumbnail": null,
     "textSide": {
       "name": "The Desperate Man",
       "painter": "Gustave Courbet (c 1843)",
@@ -1548,7 +1532,6 @@
   },
   {
     "imageSide": "https://images2.imgbox.com/5f/79/GglpBX6g_o.jpg",
-    "imageThumbnail": null,
     "textSide": {
       "name": "The Painters Studio",
       "painter": "Gustave Courbet",
@@ -1558,7 +1541,6 @@
   },
   {
     "imageSide": "https://images2.imgbox.com/7e/eb/aXO0HjoR_o.png",
-    "imageThumbnail": null,
     "textSide": {
       "name": "Surprised",
       "painter": "Henri Rousseau",
@@ -1568,7 +1550,6 @@
   },
   {
     "imageSide": "https://images2.imgbox.com/fa/15/8IrA6Z5E_o.png",
-    "imageThumbnail": null,
     "textSide": {
       "name": "The Dream",
       "painter": "Henri Rousseau (1910)",
@@ -1578,7 +1559,6 @@
   },
   {
     "imageSide": "https://images2.imgbox.com/ff/3b/MdbUP4Ax_o.png",
-    "imageThumbnail": null,
     "textSide": {
       "name": "Tiger and Cubs",
       "painter": "Jean-Leon Gerome (1884)",
@@ -1588,12 +1568,47 @@
   },
   {
     "imageSide": "https://images2.imgbox.com/7c/b6/euWWCP1L_o.png",
-    "imageThumbnail": null,
     "textSide": {
       "name": "Waiting",
       "painter": "Jules-Adolphe Breton (1873)",
       "location": "Detroit Institute of Arts, USA"
     },
     "id": 341
+  },
+  {
+    "imageSide": "https://images2.imgbox.com/39/16/eFYqrXYU_o.png",
+    "textSide": {
+      "name": "Lady Lilith",
+      "painter": "Dante Gabriel Rossetti",
+      "location": "Delaware Art Museum, Wilmington, Delaware, USA"
+    },
+    "id": 342
+  },
+  {
+    "imageSide": "https://images2.imgbox.com/55/a9/4VFkQPeO_o.png",
+    "textSide": {
+      "name": "Venus Verticordia",
+      "painter": "Dante Gabriel Rossetti (1868)",
+      "location": "Russell-Cotes Art Gallery & Museum, Bournemouth, UK"
+    },
+    "id": 343
+  },
+  {
+    "imageSide": "https://images2.imgbox.com/fc/87/xWQJrHTR_o.png",
+    "textSide": {
+      "name": "The Lady of Shalott",
+      "painter": "John William Waterhouse (1888)",
+      "location": "Tate Britain, London, UK"
+    },
+    "id": 344
+  },
+  {
+    "imageSide": "https://images2.imgbox.com/49/2a/scFgd56m_o.jpg",
+    "textSide": {
+      "name": "Sklavenhändler",
+      "painter": "Otto Pilny (1919)",
+      "location": "Private collection"
+    },
+    "id": 345
   }
 ]
